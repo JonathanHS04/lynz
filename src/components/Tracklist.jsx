@@ -2,12 +2,12 @@ import React from 'react'
 import Link from 'next/link'
 import { getRatingFont, getRatingHoverBorder } from '@/utils/getRatingStyle';
 
-const Tracklist = ({ albumData, images=false }) => {
+const Tracklist = ({ tracks, images=false }) => {
     return (
         <div className="lg:col-span-2 space-y-8">
 
             <div className="space-y-1">
-                {albumData.tracks?.map((track, index) => (
+                {tracks?.map((track, index) => (
                     <Link href={`/Song/${track.id}`} key={track.id}>
                         <div
                             className={`flex items-center gap-4 p-4 rounded-xl transition-all group cursor-pointer border border-transparent ${getRatingHoverBorder(track.rating)} transition-colors`}
@@ -34,7 +34,7 @@ const Tracklist = ({ albumData, images=false }) => {
                                 <div className="flex items-center gap-2 mt-0.5 flex-wrap">
                                     {/* Artista Principal */}
                                     <span className="text-[10px] text-gray-500 font-bold uppercase tracking-widest italic">
-                                        {albumData.artist}
+                                        {track.artist}
                                     </span>
 
                                     {/* Renderizado de Features */}

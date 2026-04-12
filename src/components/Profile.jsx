@@ -10,7 +10,7 @@ const Profile = ({ data }) => {
                 </p>
             </section>
 
-            <RankingInfo albumData={data} />
+            <RankingInfo rankings={data.rankings} />
         </>
     )
 }

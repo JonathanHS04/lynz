@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from 'next/link';
 
-const RankingCard = ({ title, rank }) => {
+const RankingCard = ({ title, rank}) => {
     return (
         <Link href="/Rankings">
         <div className="bg-zinc-900/50 p-5 rounded-3xl border border-white/5 group hover:border-violet-500/30 cursor-pointer transition-all">
@@ -13,14 +13,14 @@ const RankingCard = ({ title, rank }) => {
     );
 };
 
-const RankingInfo = () => {
+const RankingInfo = ({ rankings }) => {
     return (
         <section className="grid grid-cols-2 gap-4">
-            <RankingCard title="Top Global" rank="#56" />
-            <RankingCard title="Top del artista" rank="#1" />
-            <RankingCard title="Top del género" rank="#4" />
+            {rankings.map((ranking) => (
+                <RankingCard key={ranking.id} title={ranking.title} rank={ranking.rank} />
+            ))}
         </section>
-    )
-}
+    );
+};
 
-export default RankingInfo
+export default RankingInfo;

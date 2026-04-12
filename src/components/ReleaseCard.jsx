@@ -2,6 +2,7 @@ import React from 'react'
 import Link from 'next/link';
 import { Star } from 'lucide-react';
 import { getRatingFont, getRatingBorder } from '@/utils/getRatingStyle';
+import RatingSquare from './RatingSquare';
 
 const ReleaseCard = ({release, author=false}) => {
     return (
@@ -15,12 +16,7 @@ const ReleaseCard = ({release, author=false}) => {
                         alt={release.title}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
-                    <div className={`flex justify-center items-center gap-1 absolute right-4 top-4 rounded-xl border bg-black/65 px-3 py-2 backdrop-blur-sm ${getRatingBorder(release.rating)}`}>
-                        <Star className={`h-3 w-3 fill-current ${getRatingFont(release.rating)}`} strokeWidth={2.2} />
-                        <span className={`text-sm font-black ${getRatingFont(release.rating)}`}>
-                            {release.rating.toFixed(1)}
-                        </span>
-                    </div>
+                    <RatingSquare rating={release.rating} />
                 </div>
 
                 {/* Este div p-5 ahora crece para llenar el espacio sobrante */}

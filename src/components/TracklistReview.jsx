@@ -1,6 +1,8 @@
 import React from 'react'
 import { MessageSquare, Quote } from 'lucide-react'
 import getRatingStyle from '@/utils/getRatingStyle';
+import RatingSquare from './RatingSquare';
+import Link from 'next/link';
 
 const TracklistReview = ({ reviewData }) => {
 
@@ -13,7 +15,7 @@ const TracklistReview = ({ reviewData }) => {
           </h3>
         </div>
         <div className="hidden sm:block text-xs font-mono text-gray-500 border border-white/10 px-4 py-2 rounded-full uppercase tracking-tighter">
-          {reviewData.tracklist.length} cortes • {reviewData.duration}
+          {reviewData.tracklist.length} tracks • {reviewData.duration}
         </div>
       </div>
       
@@ -29,8 +31,8 @@ const TracklistReview = ({ reviewData }) => {
               
               {/* IZQUIERDA: Header del Track (Número y Rating) */}
               <div className="flex flex-row md:flex-col items-center md:items-start gap-4 shrink-0">
-                <div className={`w-16 h-12 flex items-center justify-center rounded-xl border-2 font-black font-mono text-xl tracking-tighter ${getRatingStyle(track.rating)}`}>
-                  {track.rating ? track.rating.toFixed(1) : '—'}
+                <div className={`flex items-center justify-center font-black font-mono text-xl tracking-tighter`}>
+                  <RatingSquare rating={track.rating} variant="inline" />
                 </div>
                 <span className="text-gray-700 font-mono text-sm font-bold md:ml-1">
                   #{(index + 1).toString().padStart(2, '0')}
@@ -40,9 +42,9 @@ const TracklistReview = ({ reviewData }) => {
               {/* DERECHA: Contenido del Análisis */}
               <div className="flex-1">
                 <div className="flex items-baseline justify-between mb-3 gap-4">
-                  <h4 className="text-xl font-bold text-white group-hover:text-violet-400 transition-colors">
+                  <Link href = {`/Song/${track.id}`} className="text-xl font-bold text-white hover:text-violet-400 transition-colors">
                     {track.title}
-                  </h4>
+                  </Link>
                   <span className="text-gray-600 text-xs font-mono shrink-0 uppercase tracking-widest italic">
                     [{track.duration}]
                   </span>

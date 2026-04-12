@@ -2,12 +2,13 @@ import React from 'react'
 import { Star } from 'lucide-react';
 import { getRatingBorder, getRatingFont } from '@/utils/getRatingStyle';
 
-const SonicProfile = ({ data, metrics, image=true}) => {
+const SonicProfile = ({ data, metrics, image=true, header=true }) => {
     return (
         <article className="rounded-[2rem] bg-white/[0.02] p-6 md:p-8">
 
             {/* HEADER */}
-            <div className="flex items-center justify-between mb-8">
+            {header && (
+                <div className="flex items-center justify-between mb-8">
                 <div>
                     <p className='text-[10px] uppercase tracking-widest text-zinc-500 font-bold'>Basado en las reseñas</p>
                     <h2 className="text-2xl font-black uppercase tracking-tight">
@@ -21,6 +22,7 @@ const SonicProfile = ({ data, metrics, image=true}) => {
                     </span>
                 </div>
             </div>
+            )}
 
             {/* CONTENIDO: IMAGEN + GRID */}
             <div className={`grid grid-cols-1 gap-6 items-start ${image ? 'md:grid-cols-[220px_1fr]' : ''}`}>
@@ -41,7 +43,7 @@ const SonicProfile = ({ data, metrics, image=true}) => {
                     {metrics.map((stat) => (
                         <div
                             key={stat.label}
-                            className={`rounded-[1.25rem] border bg-black/30 p-4 transition-all ${getRatingBorder(stat.value)}`}
+                            className={`rounded-[1.25rem] border justify-center items-center flex flex-col bg-black/30 p-4 transition-all ${getRatingBorder(stat.value)}`}
                         >
                             <span className="text-[10px] uppercase text-zinc-500">
                                 {stat.label}

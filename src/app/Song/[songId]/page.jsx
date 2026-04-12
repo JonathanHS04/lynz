@@ -11,6 +11,7 @@ import Profile from '@/components/Profile';
 
 import { userReviews, sonicProfile, artistPerformance, songData } from './mockData';
 import SonicProfile from '@/components/SonicProfile';
+import BackButton from '@/components/BackButton';
 
 export default function SongPage() {
     const [imgError, setImgError] = useState(false);
@@ -29,12 +30,11 @@ export default function SongPage() {
                 </div>
 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pb-12 z-10">
+
                     <div className="flex flex-col md:flex-row gap-12 items-center md:items-end text-center md:text-left">
-                        <div className="relative group shrink-0 shadow-[0_0_80px_rgba(139,92,246,0.2)] rounded-full overflow-hidden w-64 h-64 md:w-80 md:h-80 border-4 border-white/5 cursor-pointer">
+                        <div className="relative group shrink-0 shadow-[0_0_80px_rgba(139,92,246,0.2)] rounded-full overflow-hidden w-64 h-64 md:w-80 md:h-80 border-4 border-white/5">
                             <img src={songData.image} className="w-full h-full object-cover" alt={songData.title} />
-                            <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <Play className="w-16 h-16 fill-white" />
-                            </div>
+
                         </div>
 
                         <div className="flex-1 space-y-6">
@@ -57,7 +57,7 @@ export default function SongPage() {
                                     )}
                                 </div>
                             </div>
-                            <RatingAndQuickActions rating={songData.rating} />
+                            <RatingAndQuickActions rating={songData.rating} ratingHref={`/Reviews/Song/${songData.id}`} />
                         </div>
                     </div>
                 </div>
@@ -116,9 +116,9 @@ export default function SongPage() {
                             </div>
                         </div>
 
-                        <div className="bg-violet-500 px-6 py-3 rounded-2xl text-center">
-                            <p className="text-[10px] uppercase tracking-widest text-violet-100 font-bold leading-none mb-1">Año</p>
-                            <p className="text-2xl font-black leading-none">{songData.releaseDate}</p>
+                        <div className="border border-violet-300 px-6 py-3 rounded-2xl text-center">
+                            <p className="text-[10px] uppercase tracking-widest text-violet-300 font-bold leading-none mb-1">Año</p>
+                            <p className="text-violet-300 text-2xl font-black leading-none">{songData.releaseDate}</p>
                         </div>
                     </div>
                 </section>

@@ -1,103 +1,133 @@
-import React from 'react';
-import Link from 'next/link';
-import { ChevronRight, MessageSquareMore, Star } from 'lucide-react';
-import { getRatingFont } from '@/utils/getRatingStyle';
+"use client";
 
-const reviews = [
-    {
-        id: 1,
-        username: 'Lucia.mp3',
-        avatar: 'https://avatar.vercel.sh/lucia',
-        rating: 9.6,
-        timeAgo: 'Hace 2 horas',
-        likes: 31,
-        comments: 4,
-        text: 'El álbum se siente coherente de principio a fin. Tiene un tono oscuro muy claro y varios picos que sí justifican el hype.',
-    },
-    {
-        id: 2,
-        username: 'NicoLynz',
-        avatar: 'https://avatar.vercel.sh/nico',
-        rating: 8.9,
-        timeAgo: 'Hace 5 horas',
-        likes: 18,
-        comments: 2,
-        text: 'No todos los tracks pegan igual, pero cuando encuentra el mood correcto el proyecto está muy por encima de la media.',
-    },
-    {
-        id: 3,
-        username: 'Sofia.wav',
-        avatar: 'https://avatar.vercel.sh/sofia',
-        rating: 9.3,
-        timeAgo: 'Ayer',
-        likes: 22,
-        comments: 6,
-        text: 'Producción muy cuidada, buenos feats y una identidad visual-sonora bastante marcada. Se siente como una era, no solo un drop.',
-    },
-    {
-        id: 4,
-        username: 'MarcoTape',
-        avatar: 'https://avatar.vercel.sh/marco',
-        rating: 8.7,
-        timeAgo: 'Hace 2 días',
-        likes: 14,
-        comments: 1,
-        text: 'La segunda mitad me parece más fuerte que la primera. Igual el proyecto tiene una dirección bastante clara y eso se agradece.',
-    },
-];
+import React, { useState, useMemo } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import {
+    Heart,
+    MessageSquareMore,
+    SlidersHorizontal,
+    ChevronLeft,
+    ChevronRight,
+    Star,
+    ArrowUpRight,
+    ArrowDownWideNarrow
+} from "lucide-react";
 
-export default function AlbumReviewsPage() {
+import { getRatingFont } from "@/utils/getRatingStyle";
+import { albumData, userReviews } from "./mockData";
+import RatingSquare from "@/components/RatingSquare";
+import LikeAndComment from "@/components/LikeAndComment";
+import BackButton from "@/components/BackButton";
+import SonicProfile from "@/components/SonicProfile";
+import { formatRelativeTime } from "@/utils/formatTime"; // Ajusta la ruta según tu carpeta
+import ReviewsExplorer from "./components/ReviewsExplorer";
+
+export default function ReviewsPage() {
+    const router = useRouter();
+    const data = albumData;
+    const albumId = String(albumData.id);
+
+    const [reviewsState, setReviewsState] = useState(
+        userReviews.map((r) => ({ ...r, liked: false }))
+    );
+
+    
+
+    const toggleLike = (reviewId) => {
+        setReviewsState((reviews) =>
+            reviews.map((r) =>
+                r.id === reviewId
+                    ? {
+                        ...r,
+                        liked: !r.liked,
+                        likes: r.liked ? r.likes - 1 : r.likes + 1,
+                    }
+                    : r
+            )
+        );
+    };
+
     return (
-        <div className="min-h-screen bg-[#0a0a0a] text-white py-12">
-            <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="mb-10 border-b border-white/5 pb-6">
-                    <p className="text-[10px] font-black uppercase tracking-[0.35em] text-zinc-500">Community</p>
-                    <h1 className="mt-3 text-4xl md:text-5xl font-black uppercase tracking-tighter text-white">
-                        Todas las reseñas del álbum
-                    </h1>
+        <div className="min-h-screen bg-[#0a0a0a] text-white">
+
+            {/* HERO */}
+            <header className="relative h-[55vh] flex items-end overflow-hidden border-b border-white/5">
+                <div className="absolute inset-0">
+                    <img
+                        src={data.image}
+                        className="w-full h-full object-cover scale-150 blur-3xl opacity-20"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent" />
                 </div>
 
-                <div className="space-y-3">
-                    {reviews.map((review) => (
-                        <article key={review.id} className="rounded-[1.5rem] border border-white/8 bg-[linear-gradient(145deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01))] p-4 md:p-5">
-                            <div className="flex items-start justify-between gap-4">
-                                <div className="flex items-center gap-3 min-w-0">
-                                    <img
-                                        src={review.avatar}
-                                        alt={review.username}
-                                        className="h-12 w-12 shrink-0 rounded-full object-cover border border-white/10"
-                                    />
+                <div className="max-w-7xl mx-auto px-4 pb-10 w-full z-10">
 
-                                    <div className="min-w-0">
-                                        <p className="truncate text-base font-black uppercase tracking-tight text-white">
-                                            {review.username}
-                                        </p>
-                                        <p className="mt-1 text-[10px] font-black uppercase tracking-[0.24em] text-zinc-500">
-                                            {review.timeAgo}
-                                        </p>
-                                    </div>
-                                </div>
+                    <BackButton />
 
-                                <div className={`inline-flex items-center gap-2 rounded-xl border border-white/10 bg-black/30 px-3 py-2 text-sm font-black ${getRatingFont(review.rating)}`}>
-                                    <Star className="h-4 w-4 fill-current" strokeWidth={2.2} />
-                                    {review.rating.toFixed(1)}
-                                </div>
-                            </div>
+                    <div className="flex items-end gap-6 flex-wrap">
+                        <img
+                            src={data.image}
+                            className="w-28 h-28 md:w-36 md:h-36 rounded-2xl border border-white/10"
+                        />
 
-                            <p className="mt-4 text-sm md:text-base leading-relaxed text-zinc-300/85">
-                                {review.text}
+                        <div className="space-y-3">
+                            <p className="text-xs uppercase tracking-widest text-zinc-500 font-bold">
+                                Álbum
                             </p>
 
-                            <div className="mt-4 flex items-center gap-4 text-[11px] font-black uppercase tracking-[0.2em] text-zinc-500">
-                                <span>{review.likes} likes</span>
-                                <span>{review.comments} comentarios</span>
-                                <Link href={`/Reviews/Album/1/${review.id}`} className="ml-auto inline-flex items-center gap-1.5 transition-colors hover:text-white">
-                                    Abrir review
-                                    <ChevronRight className="h-3.5 w-3.5" />
+                            <h1 className="text-4xl md:text-6xl font-black uppercase">
+                                {data.title}
+                            </h1>
+
+                            <p className="text-white/70">
+                                <Link href={`/Artist/${data.id}`} className="hover:text-violet-400 font-black">
+                                    {data.artist}
                                 </Link>
+                            </p>
+
+                            <div className="flex items-center gap-6 text-sm text-zinc-400">
+                                <RatingSquare rating={data.rating} variant="inline" />
+                                <span>{reviewsState.length} reseñas</span>
                             </div>
-                        </article>
-                    ))}
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            {/* CONTENT */}
+            <main className="max-w-7xl mx-auto px-4 py-12">
+
+                <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12">
+
+                    {/* IZQUIERDA */}
+                    <div className="space-y-8">
+                        <ReviewsExplorer reviewsState={reviewsState} setReviewsState={setReviewsState}/>
+                    </div>
+
+                    {/* SIDEBAR */}
+                    <aside className="space-y-6">
+                        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
+                            <h3 className="text-m text-white font-black tracking-tight mb-4">Resumen</h3>
+
+                            <div className="flex justify-between">
+                                <span className="text-zinc-400">Rating</span>
+                                <div className="flex items-center gap-1">
+                                    <Star className={`w-4 h-4 ${getRatingFont(data.rating)} fill-current`} />
+                                    <span className={`font-black ${getRatingFont(data.rating)}`}>
+                                        {data.rating}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div className="flex justify-between mt-2">
+                                <span className="text-zinc-400">Reseñas</span>
+                                <span>{reviewsState.length}</span>
+                            </div>
+                        </div>
+                            <SonicProfile data={albumData} metrics={albumData.metrics} image={false} />
+
+                    </aside>
                 </div>
             </main>
         </div>
