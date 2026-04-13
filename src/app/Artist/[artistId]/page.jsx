@@ -53,6 +53,10 @@ const artistData = {
         { id: 1, title: 'Top Global', rank: '#56' },
         { id: 2, title: 'Top del género', rank: '#4' }
     ]
+
+
+
+
 };
 
 const sectionLabel = 'text-[10px] font-black uppercase tracking-[0.35em] text-zinc-500';
