@@ -1,4 +1,7 @@
+"use client";
+
 import React from 'react';
+import { useParams } from 'next/navigation';
 import { MapPin } from 'lucide-react';
 import RatingAndQuickActions from '@/components/RatingAndQuickActions';
 import Tracklist from '@/components/Tracklist';
@@ -9,59 +12,159 @@ import RankingInfoSong from '@/components/RankingInfoSong';
 import UserReviewsPanel from '@/components/UserReviewsPanel';
 import Profile from '@/components/Profile';
 
-const artistData = {
-    name: 'Omar Courtz',
+const artists = [
+    {
+        id: 1,
+        name: 'Omar Courtz',
+        verified: true,
+        rating: 9.7,
+        country: 'Puerto Rico',
+        activeSince: '2019',
+        genreLine: 'Reggaetón / Trap Latino / Experimental',
+        image: 'https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages221/v4/f5/7c/21/f57c21d6-590a-b07e-1027-e92e6c62cfe6/ami-identity-cee5abcdd03c2870378144a376dce33d-2025-04-18T00-19-44.218Z_cropped.png/486x486bb.png',
+        portrait: 'https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages221/v4/f5/7c/21/f57c21d6-590a-b07e-1027-e92e6c62cfe6/ami-identity-cee5abcdd03c2870378144a376dce33d-2025-04-18T00-19-44.218Z_cropped.png/1280x720bb.png',
+        description: 'Una de las voces que mejor está empujando el urbano hacia terrenos más oscuros, sensuales y cinematográficos. Su propuesta mezcla melodías pegajosas, texturas nocturnas y una identidad visual muy marcada.',
+        genres: ['Reggaetón', 'Trap Latino', 'Alt Urbano'],
+        milestones: [
+            { label: 'Top Track', value: 'COMERNOS' },
+            { label: 'Latest Era', value: 'POR SI MAÑANA NO ESTOY' },
+            { label: 'Peak Reach', value: '41M plays' },
+        ],
+        topTracks: [
+            { id: 15, artist: "Omar Courtz", title: 'COMERNOS', albumId: 1, album: 'POR SI MAÑANA NO ESTOY', plays: '41M', duration: '3:42', rating: 9.9, features: ['Bad Gyal'], image: 'https://i1.sndcdn.com/artworks-72d80e69-18fe-4175-b049-3393db902285-0-t500x500.jpg' },
+            { id: 18, artist: "Omar Courtz", title: 'POR SI MAÑANA NO ESTOY', albumId: 1, album: 'POR SI MAÑANA NO ESTOY', plays: '31M', duration: '4:25', rating: 9.8, features: [], image: 'https://i1.sndcdn.com/artworks-72d80e69-18fe-4175-b049-3393db902285-0-t500x500.jpg' },
+            { id: 3, artist: "Omar Courtz", title: 'FOREVER TU GANTEL', albumId: 1, album: 'POR SI MAÑANA NO ESTOY', plays: '20M', duration: '3:47', rating: 9.5, features: ["Ñengo Flow"], image: 'https://i1.sndcdn.com/artworks-72d80e69-18fe-4175-b049-3393db902285-0-t500x500.jpg' },
+            { id: 12, artist: "Omar Courtz", title: 'WHAT U NEED?', albumId: 1, album: 'POR SI MAÑANA NO ESTOY', plays: '12M', duration: '4:26', rating: 9.4, features: ['Myke Towers'], image: 'https://i1.sndcdn.com/artworks-72d80e69-18fe-4175-b049-3393db902285-0-t500x500.jpg' },
+            { id: 9, artist: "Omar Courtz", title: 'SI ESTÁS CON ALGUIEN', albumId: 1, album: 'POR SI MAÑANA NO ESTOY', plays: '15M', duration: '4:12', rating: 9.3, features: [], image: 'https://i1.sndcdn.com/artworks-72d80e69-18fe-4175-b049-3393db902285-0-t500x500.jpg' },
+        ],
+        releases: [
+            { id: 1, title: 'POR SI MAÑANA NO ESTOY', year: '2026', type: 'Álbum', image: 'https://i1.sndcdn.com/artworks-72d80e69-18fe-4175-b049-3393db902285-0-t500x500.jpg', rating: 9.4 },
+            { id: 3, title: 'PRIMERA MUSA', year: '2023', type: 'EP', image: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/30/0f/48/300f48fd-f560-8aaf-17c1-00a4531ad61a/198588847695.jpg/1200x630bb.jpg', rating: 8.6 },
+        ],
+        collaborators: [
+            { name: 'Bad Gyal', role: 'Feature recurrente' },
+            { name: 'Myke Towers', role: 'Colaboración clave' },
+            { name: 'Eladio Carrión', role: 'Puente con el trap' },
+        ],
+        sonicProfile: [
+            { label: 'Ritmo', value: 9.2 },
+            { label: 'Flow', value: 8.8 },
+            { label: 'Letra', value: 7.5 },
+            { label: 'Producción', value: 7.3 },
+            { label: 'Impacto', value: 9.6 },
+            { label: 'Innovación', value: 8.1 },
+        ],
+        rankings: [
+            { id: 1, title: 'Top Global', rank: '#56' },
+            { id: 2, title: 'Top del género', rank: '#4' }
+        ]
+    },
+    {
+        id: 2,
+        name: 'Twenty One Pilots',
+        verified: true,
+        rating: 9.2,
+        country: 'Columbus, Ohio',
+        activeSince: '2009',
+        genreLine: 'Alternative / Indie / Electropop',
+        image: 'https://i.scdn.co/image/ab6761610000517461a7ea26d33ded218cd1e59d',
+        portrait: 'https://i.scdn.co/image/ab6761610000517461a7ea26d33ded218cd1e59d',
+        description: 'Dúo formado por Tyler Joseph y Josh Dun. Pioneros en mezclar rap, rock alternativo, electrónica y pop en una propuesta completamente propia. Con más de 40 millones de oyentes mensuales, son uno de los actos de rock más grandes de su generación.',
+        genres: ['Alternative Rock', 'Indie Pop', 'Electropop'],
+        milestones: [
+            { label: 'Top Track', value: 'Stressed Out' },
+            { label: 'Latest Era', value: 'Breach' },
+            { label: 'Peak Reach', value: '2.9B plays' },
+        ],
+        topTracks: [
+            { id: 1, artist: "Twenty One Pilots", title: 'Stressed Out', albumId: 201, album: 'Blurryface', plays: '2.9B', duration: '3:22', rating: 9.8, features: [], image: 'https://i.scdn.co/image/ab67616d00001e022df0d98a423025032d0db1f7' },
+            { id: 2, artist: "Twenty One Pilots", title: 'Ride', albumId: 201, album: 'Blurryface', plays: '2.2B', duration: '3:34', rating: 9.6, features: [], image: 'https://i.scdn.co/image/ab67616d00001e022df0d98a423025032d0db1f7' },
+            { id: 3, artist: "Twenty One Pilots", title: 'Heathens', albumId: 201, album: 'Blurryface', plays: '2.1B', duration: '3:15', rating: 9.5, features: [], image: 'https://i.scdn.co/image/ab67616d00001e022df0d98a423025032d0db1f7' },
+            { id: 4, artist: "Twenty One Pilots", title: 'Jumpsuit', albumId: 202, album: 'Trench', plays: '780M', duration: '3:52', rating: 9.3, features: [], image: 'https://i.scdn.co/image/ab67616d00001e02d1d301e737da4324479c6660' },
+            { id: 5, artist: "Twenty One Pilots", title: 'Overcompensate', albumId: 203, album: 'Clancy', plays: '210M', duration: '3:14', rating: 9.1, features: [], image: 'https://i.scdn.co/image/ab67616d00001e02cc94dd4730132ccfbd617bf9' },
+        ],
+        releases: [
+            { id: 204, title: 'Breach', year: '2025', type: 'Álbum', image: 'https://i.scdn.co/image/ab67616d00001e029c5a3160cc1a6ef5efdaf80a', rating: 9.0 },
+            { id: 203, title: 'Clancy', year: '2024', type: 'Álbum', image: 'https://i.scdn.co/image/ab67616d00001e02cc94dd4730132ccfbd617bf9', rating: 8.9 },
+            { id: 202, title: 'Trench', year: '2018', type: 'Álbum', image: 'https://i.scdn.co/image/ab67616d00001e02d1d301e737da4324479c6660', rating: 9.3 },
+            { id: 201, title: 'Blurryface', year: '2015', type: 'Álbum', image: 'https://i.scdn.co/image/ab67616d00001e022df0d98a423025032d0db1f7', rating: 9.7 },
+        ],
+        collaborators: [
+            { name: 'Paul Meany', role: 'Productor principal' },
+            { name: 'Josh Dun', role: 'Baterista y co-fundador' },
+            { name: 'Mike Elizondo', role: 'Co-productor en Breach' },
+        ],
+        sonicProfile: [
+            { label: 'Ritmo', value: 8.9 },
+            { label: 'Flow', value: 9.1 },
+            { label: 'Letra', value: 9.6 },
+            { label: 'Producción', value: 9.3 },
+            { label: 'Impacto', value: 9.8 },
+            { label: 'Innovación', value: 9.5 },
+        ],
+        rankings: [
+            { id: 1, title: 'Top Global', rank: '#12' },
+            { id: 2, title: 'Top del género', rank: '#1' },
+        ]
+    },
+
+    {
+    id: 3,
+    name: 'Bad Gyal',
     verified: true,
-    rating: 9.7,
-    country: 'Puerto Rico',
-    activeSince: '2019',
-    genreLine: 'Reggaetón / Trap Latino / Experimental',
-    image: 'https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages221/v4/f5/7c/21/f57c21d6-590a-b07e-1027-e92e6c62cfe6/ami-identity-cee5abcdd03c2870378144a376dce33d-2025-04-18T00-19-44.218Z_cropped.png/486x486bb.png',
-    portrait: 'https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages221/v4/f5/7c/21/f57c21d6-590a-b07e-1027-e92e6c62cfe6/ami-identity-cee5abcdd03c2870378144a376dce33d-2025-04-18T00-19-44.218Z_cropped.png/1280x720bb.png',
-    description: 'Una de las voces que mejor está empujando el urbano hacia terrenos más oscuros, sensuales y cinematográficos. Su propuesta mezcla melodías pegajosas, texturas nocturnas y una identidad visual muy marcada.',
-    genres: ['Reggaetón', 'Trap Latino', 'Alt Urbano'],
+    rating: 8.8,
+    country: 'Barcelona, España',
+    activeSince: '2015',
+    genreLine: 'Dancehall / Reggaetón / Pop Urbano',
+    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6v5uBzxRFt5jpsC33cGOUhBwB7NTSuoBo7A&s',
+    portrait: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6v5uBzxRFt5jpsC33cGOUhBwB7NTSuoBo7A&s',
+    description: 'Alba Farelo, conocida como Bad Gyal, es una artista barcelonesa que fusiona el dancehall jamaicano con el reggaetón y el pop urbano. Una de las voces más originales del panorama español e internacional.',
+    genres: ['Dancehall', 'Reggaetón', 'Pop Urbano'],
     milestones: [
-        { label: 'Top Track', value: 'COMERNOS' },
-        { label: 'Latest Era', value: 'POR SI MAÑANA NO ESTOY' },
-        { label: 'Peak Reach', value: '41M plays' },
+        { label: 'Top Track', value: 'Chulo' },
+        { label: 'Latest Era', value: 'Warm Up' },
+        { label: 'Peak Reach', value: '8.1M oyentes' },
     ],
     topTracks: [
-        { id: 15, artist: "Omar Courtz", title: 'COMERNOS', albumId: 1, album: 'POR SI MAÑANA NO ESTOY', plays: '41M', duration: '3:42', rating: 9.9, features: ['Bad Gyal'], image: 'https://i1.sndcdn.com/artworks-72d80e69-18fe-4175-b049-3393db902285-0-t500x500.jpg' },
-        { id: 18, artist: "Omar Courtz", title: 'POR SI MAÑANA NO ESTOY', albumId: 1, album: 'POR SI MAÑANA NO ESTOY', plays: '31M', duration: '4:25', rating: 9.8, features: [], image: 'https://i1.sndcdn.com/artworks-72d80e69-18fe-4175-b049-3393db902285-0-t500x500.jpg' },
-        { id: 3, artist: "Omar Courtz", title: 'FOREVER TU GANTEL', albumId: 1, album: 'POR SI MAÑANA NO ESTOY', plays: '20M', duration: '3:47', rating: 9.5, features: ["Ñengo Flow"], image: 'https://i1.sndcdn.com/artworks-72d80e69-18fe-4175-b049-3393db902285-0-t500x500.jpg' },
-        { id: 12, artist: "Omar Courtz", title: 'WHAT U NEED?', albumId: 1, album: 'POR SI MAÑANA NO ESTOY', plays: '12M', duration: '4:26', rating: 9.4, features: ['Myke Towers'], image: 'https://i1.sndcdn.com/artworks-72d80e69-18fe-4175-b049-3393db902285-0-t500x500.jpg' },
-        { id: 9, artist: "Omar Courtz", title: 'SI ESTÁS CON ALGUIEN', albumId: 1, album: 'POR SI MAÑANA NO ESTOY', plays: '15M', duration: '4:12', rating: 9.3, features: [], image: 'https://i1.sndcdn.com/artworks-72d80e69-18fe-4175-b049-3393db902285-0-t500x500.jpg' },
+        { id: 101, artist: "Bad Gyal", title: 'Chulo', albumId: 301, album: 'Warm Up', plays: '120M', duration: '2:58', rating: 9.1, features: [], image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6v5uBzxRFt5jpsC33cGOUhBwB7NTSuoBo7A&s' },
+        { id: 102, artist: "Bad Gyal", title: 'Fiebre', albumId: 301, album: 'Warm Up', plays: '95M', duration: '3:10', rating: 8.9, features: [], image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6v5uBzxRFt5jpsC33cGOUhBwB7NTSuoBo7A&s' },
+        { id: 103, artist: "Bad Gyal", title: 'Internationally', albumId: 301, album: 'Warm Up', plays: '80M', duration: '2:45', rating: 8.7, features: [], image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6v5uBzxRFt5jpsC33cGOUhBwB7NTSuoBo7A&s' },
+        { id: 15, artist: "Bad Gyal ft. Omar Courtz", title: 'COMERNOS', albumId: 1, album: 'POR SI MAÑANA NO ESTOY', plays: '41M', duration: '3:42', rating: 9.9, features: ['Omar Courtz'], image: 'https://i1.sndcdn.com/artworks-72d80e69-18fe-4175-b049-3393db902285-0-t500x500.jpg' },
     ],
     releases: [
-        { id: 1, title: 'POR SI MAÑANA NO ESTOY', year: '2026', type: 'Álbum', image: 'https://i1.sndcdn.com/artworks-72d80e69-18fe-4175-b049-3393db902285-0-t500x500.jpg', rating: 9.4 },
-        { id: 3, title: 'PRIMERA MUSA', year: '2023', type: 'EP', image: 'https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/30/0f/48/300f48fd-f560-8aaf-17c1-00a4531ad61a/198588847695.jpg/1200x630bb.jpg', rating: 8.6 },
+        { id: 301, title: 'Warm Up', year: '2019', type: 'Álbum', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6v5uBzxRFt5jpsC33cGOUhBwB7NTSuoBo7A&s', rating: 8.7 },
     ],
     collaborators: [
-        { name: 'Bad Gyal', role: 'Feature recurrente' },
-        { name: 'Myke Towers', role: 'Colaboración clave' },
-        { name: 'Eladio Carrión', role: 'Puente con el trap' },
+        { name: 'Omar Courtz', role: 'Colaboración destacada' },
+        { name: 'Daddy Yankee', role: 'Feature internacional' },
+        { name: 'J Balvin', role: 'Colaboración clave' },
     ],
     sonicProfile: [
-        { label: 'Ritmo', value: 9.2 },
-        { label: 'Flow', value: 8.8 },
-        { label: 'Letra', value: 7.5 },
-        { label: 'Producción', value: 7.3 },
-        { label: 'Impacto', value: 9.6 },
-        { label: 'Innovación', value: 8.1 },
+        { label: 'Ritmo', value: 9.3 },
+        { label: 'Flow', value: 9.0 },
+        { label: 'Letra', value: 8.2 },
+        { label: 'Producción', value: 8.8 },
+        { label: 'Impacto', value: 8.9 },
+        { label: 'Innovación', value: 9.1 },
     ],
     rankings: [
-        { id: 1, title: 'Top Global', rank: '#56' },
-        { id: 2, title: 'Top del género', rank: '#4' }
+        { id: 1, title: 'Top Global', rank: '#38' },
+        { id: 2, title: 'Top del género', rank: '#2' },
     ]
+    }
 
 
 
 
-};
+];
 
 const sectionLabel = 'text-[10px] font-black uppercase tracking-[0.35em] text-zinc-500';
 
 export default function ArtistPage() {
+    const params = useParams();
+    const artistId = Number(params.artistId);
+    const artistData = artists.find(a => a.id === artistId) || artists[0];
+
     return (
         <div className="min-h-screen bg-[#0a0a0a] text-white">
 
@@ -92,66 +195,39 @@ export default function ArtistPage() {
             </div>
             </header>
 
-
             <main className="max-w-7xl mx-auto px-6 py-14 space-y-14">
-
-                {/* --- MAIN GRID --- */}
                 <section className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-12">
-
-                    {/* IZQUIERDA */}
                     <div className="space-y-12">
-
-
-                        {/* RELEASES */}
                         <section className="space-y-6">
                             <div>
                                 <p className={sectionLabel}>Discografía</p>
                                 <h2 className="text-3xl font-black">Lanzamientos</h2>
                             </div>
-
                             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                                 {artistData.releases.map(r => (
                                     <ReleaseCard key={r.id} release={r} />
                                 ))}
                             </div>
                         </section>
-
-
-                        {/* TRACKLIST */}
                         <section className="rounded-3xl p-6">
                             <div className="mb-6">
                                 <p className={sectionLabel}>Popular</p>
                                 <h2 className="text-3xl font-black">Top Tracks</h2>
                             </div>
-
-                            <Tracklist
-                                tracks = {artistData.topTracks}
-                                images={true}
-                            />
+                            <Tracklist tracks={artistData.topTracks} images={true} />
                         </section>
-                        {/* SONIC PROFILE */}
                         <SonicProfile data={artistData} metrics={artistData.sonicProfile} />
-
                     </div>
-
-
-                    {/* DERECHA */}
                     <aside className="space-y-8 lg:top-24 self-start">
                         <h2 className='text-3xl font-black'>Biografía</h2>
-
                         <Profile data={artistData} />
-
-                        {/* REVIEWS */}
                         <UserReviewsPanel
                             reviews={userReviews}
                             Id={artistData.topTracks[0].id}
                             type="artist"
                         />
-
                     </aside>
-
                 </section>
-
             </main>
         </div>
     );

@@ -22,7 +22,7 @@ const rankingsData = {
     ]
 };
 
-const genres = ['Todos', 'Reggaetón', 'Trap', 'Urbano Latino', 'Trap Latino', 'Experimental'];
+const genres = ['Reggaetón', 'Trap', 'Urbano Latino', 'Trap Latino', 'Experimental'];
 
 function Trend({ rank, prev }) {
     const diff = prev - rank;
@@ -63,11 +63,21 @@ function RankingCard({ item, type }) {
 
 export default function RankingsPage() {
     const [activeTab, setActiveTab] = React.useState('albums');
-    const [activeGenre, setActiveGenre] = React.useState('Todos');
-    const items = rankingsData[activeTab].filter(item =>
-      activeGenre === 'Todos' || item.genre.toLowerCase().includes(activeGenre.toLowerCase())
-    );
+    const [activeGenres, setActiveGenres] = React.useState([]);
+    const [dropdownOpen, setDropdownOpen] = React.useState(false);
 
+    const toggleGenre = (genre) => {
+        setActiveGenres(prev =>
+            prev.includes(genre) ? prev.filter(g => g !== genre) : [...prev, genre]
+        );
+    };
+
+    const clearGenres = () => setActiveGenres([]);
+
+    const items = rankingsData[activeTab].filter(item =>
+        activeGenres.length === 0 || activeGenres.some(g => item.genre.toLowerCase().includes(g.toLowerCase()))
+    );
+    
     return (
         <div className="min-h-screen bg-[#0a0a0a] text-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-16">
@@ -100,20 +110,60 @@ export default function RankingsPage() {
                 </div>
 
               
-                <div className="flex flex-wrap gap-2 mb-8">
-                    {genres.map(genre => (
-                        <button
-                            key={genre}
-                            onClick={() => setActiveGenre(genre)}
-                            className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${
-                                activeGenre === genre
-                                    ? 'bg-violet-600 text-white'
-                                    : 'bg-white/5 text-white/40 hover:text-white/70 hover:bg-white/10'
-                            }`}
-                        >
-                            {genre}
-                        </button>
-                    ))}
+<div className="relative mb-8">
+    <div className="flex items-center gap-3">
+        <button
+            onClick={() => setDropdownOpen(prev => !prev)}
+            className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-white/70 hover:text-white hover:border-violet-500/50 transition-all"
+        >
+            Géneros
+            {activeGenres.length > 0 && (
+                <span className="bg-violet-600 text-white text-xs font-bold rounded-full px-2 py-0.5">
+                    {activeGenres.length}
+                </span>
+            )}
+            <span className="text-white/40">{dropdownOpen ? '▲' : '▼'}</span>
+        </button>
+
+        {activeGenres.length > 0 && (
+            <button onClick={clearGenres} className="text-xs text-white/30 hover:text-white/60 transition-colors">
+                Limpiar
+            </button>
+        )}
+
+        <div className="flex flex-wrap gap-2">
+            {activeGenres.map(genre => (
+                <span
+                    key={genre}
+                    onClick={() => toggleGenre(genre)}
+                    className="flex items-center gap-1 px-3 py-1 rounded-full bg-violet-600/20 border border-violet-500/30 text-violet-400 text-xs font-semibold cursor-pointer hover:bg-violet-600/30 transition-all"
+                >
+                    {genre} ×
+                </span>
+            ))}
+        </div>
+    </div>
+
+                    {dropdownOpen && (
+                        <div className="absolute top-12 left-0 z-20 bg-[#141414] border border-white/10 rounded-2xl p-4 shadow-2xl w-72">
+                            <p className="text-xs font-bold uppercase tracking-widest text-white/30 mb-3">Selecciona géneros</p>
+                            <div className="grid grid-cols-2 gap-2">
+                                {genres.map(genre => (
+                                    <button
+                                        key={genre}
+                                        onClick={() => toggleGenre(genre)}
+                                        className={`text-left px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
+                                            activeGenres.includes(genre)
+                                                ? 'bg-violet-600 text-white'
+                                                : 'bg-white/5 text-white/50 hover:text-white hover:bg-white/10'
+                                        }`}
+                                    >
+                                        {genre}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </div>
 
 
