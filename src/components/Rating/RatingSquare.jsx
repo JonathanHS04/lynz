@@ -3,6 +3,7 @@ import { Star } from 'lucide-react';
 import { getRatingFont, getRatingBorder } from '@/utils/getRatingStyle';
 
 const RatingSquare = ({ rating, variant = "default" }) => {
+  const safeRating = typeof rating === "number" && Number.isFinite(rating) ? rating : null;
 
   const base = "inline-flex items-center";
 
@@ -11,13 +12,13 @@ const RatingSquare = ({ rating, variant = "default" }) => {
       absolute top-4 right-4
       gap-1 px-2 py-2
       rounded-xl border bg-black/65 backdrop-blur-sm
-      ${getRatingBorder(rating)}
+      ${getRatingBorder(safeRating)}
     `,
 
     inline: `
       gap-1 px-2 py-2
       rounded-lg border bg-black/65 backdrop-blur-sm
-      ${getRatingBorder(rating)}
+      ${getRatingBorder(safeRating)}
     `,
 
     review: `
@@ -29,13 +30,13 @@ const RatingSquare = ({ rating, variant = "default" }) => {
   };
 
   return (
-    <div className={`${base} ${variants[variant]} ${getRatingFont(rating)}`}>
+    <div className={`${base} ${variants[variant]} ${getRatingFont(safeRating)}`}>
       <Star
         className={`h-4 w-4 fill-current`}
         strokeWidth={2.2}
       />
       <span className={`${variant === "review" ? "" : "text-sm font-black"}`}>
-        {rating.toFixed(1)}
+        {safeRating === null ? "--" : safeRating.toFixed(1)}
       </span>
     </div>
   );

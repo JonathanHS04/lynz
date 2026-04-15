@@ -1,5 +1,5 @@
 import React from 'react'
-import RatingButton from '@/components/RatingButton';
+import RatingButton from '@/components/Rating/RatingButton';
 import { Share2, Star } from 'lucide-react';
 import { FaSpotify } from "react-icons/fa";
 import { SiApplemusic } from "react-icons/si";
@@ -8,12 +8,13 @@ const RatingAndQuickActions = ({
   rating,
   ratingHref = '#',
   spotifyUrl = "#",
-  appleUrl = "#"
+  appleUrl = "#",
+  type = "default"
 }) => {
   return (
     <div className="flex flex-wrap items-center justify-center md:justify-start gap-6">
 
-      <RatingButton href={ratingHref} rating={rating} />
+      <RatingButton href={ratingHref} rating={rating} type={type} />
 
       {/* DIVIDER */}
       <div className="h-12 w-[1px] bg-white/10 hidden md:block" />

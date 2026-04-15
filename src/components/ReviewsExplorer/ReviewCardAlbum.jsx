@@ -2,7 +2,7 @@ import React from 'react'
 import Link from 'next/link';
 import { formatRelativeTime } from '@/utils/formatTime';
 import { ArrowUpRight } from 'lucide-react';
-import RatingSquare from '@/components/RatingSquare';
+import RatingSquare from '@/components/Rating/RatingSquare';
 import LikeAndComment from '@/components/LikeAndComment';
 
 

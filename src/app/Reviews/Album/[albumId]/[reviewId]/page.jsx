@@ -7,7 +7,6 @@ import BackButton from '@/components/BackButton';
 import SonicProfile from '@/components/SonicProfile';
 import Link from 'next/link';
 
-// --- MOCK DATA ---
 const reviewData = {
   id: 1,
   artist: "Radiohead",
@@ -21,20 +20,167 @@ const reviewData = {
   author: "Elena Silva",
   authorImage: "https://randomuser.me/api/portraits/women/1.jpg",
   date: "12 Mayo, 2024",
+
   content: [
+
     "Pocos álbumes en la historia reciente han logrado alterar la trayectoria no solo de una banda, sino de la industria musical en su totalidad. Cuando Radiohead lanzó 'In Rainbows' mediante un modelo de 'paga lo que quieras', el impacto cultural casi eclipsa el triunfo sónico que contenía. Hoy, con esta remasterización, nos vemos obligados a enfocarnos puramente en el sonido.",
+
     "Desde los primeros compases polirrítmicos de '15 Step', es evidente que la banda encontró un punto de ebullición perfecto entre la alienación electrónica de 'Kid A' y la calidez analógica de sus primeros trabajos. Las guitarras de Jonny Greenwood serpentean con una urgencia renovada, mientras que la sección rítmica de Colin Greenwood y Phil Selway nunca ha sonado tan elástica y viva.",
+
     "Conclusión: 'In Rainbows' no es solo un hito en la carrera de Radiohead; es un manual de cómo envejecer con gracia, innovación y una devoción absoluta al arte. Esta versión remasterizada simplemente limpia el polvo de un vitral que ya era perfecto."
+
   ],
+
   tracklist: [
-    { title: "15 Step", duration: "3:57", rating: 9.5, reviewText: "Un arranque explosivo que combina ritmos quebrados con melodías hipnóticas. La percusión es tan juguetona como inquietante, marcando el tono para el resto del álbum." },
-    { title: "Bodysnatchers", duration: "4:02", rating: 9.0},
-    { title: "Nude", duration: "4:15", rating: 8.6},
-    { title: "Weird Fishes/Arpeggi", duration: "5:18", rating: 9.8, reviewText: "Definitivamente la mejor del album, una obra maestra de construcción atmosférica." },
-    { title: "All I Need", duration: "3:48", rating: 9.2 },
-    { title: "Faust Arp", duration: "2:09", rating: 8.0,  reviewText: "No puedo puntuarla mejor al ser un interludio, pero es un pequeño oasis de belleza minimalista en medio del caos." },
-    { title: "Reckoner", duration: "4:50", rating: 9.7, reviewText: "Un cierre por todo lo alto, con una de las líneas de guitarra más memorables de Radiohead." },
+    {
+      title: "15 Step",
+      duration: "3:57",
+      rating: 9.5,
+      reviewText: "Un arranque explosivo que combina ritmos quebrados con melodías hipnóticas.",
+      comments: [
+        {
+          id: 1,
+          user: "Carlos Mtz",
+          avatar: "https://randomuser.me/api/portraits/men/12.jpg",
+          text: "Ese ritmo inicial es adictivo, siempre regreso a esta canción.",
+          likes: 12,
+          time: "2h"
+        },
+        {
+          id: 2,
+          user: "Ana López",
+          avatar: "https://randomuser.me/api/portraits/women/22.jpg",
+          text: "Siento que define todo el vibe del álbum.",
+          likes: 8,
+          time: "5h"
+        }
+      ]
+    },
+
+    {
+      title: "Bodysnatchers",
+      duration: "4:02",
+      rating: 9.0,
+      comments: [
+        {
+          id: 1,
+          user: "Luis R",
+          avatar: "https://randomuser.me/api/portraits/men/33.jpg",
+          text: "Esta canción en vivo es otra cosa 🔥",
+          likes: 6,
+          time: "1d"
+        }
+      ]
+    },
+
+    {
+      title: "Nude",
+      duration: "4:15",
+      rating: 8.6,
+      comments: [
+        {
+          id: 1,
+          user: "Valeria",
+          avatar: "https://randomuser.me/api/portraits/women/44.jpg",
+          text: "La voz aquí es simplemente perfecta.",
+          likes: 15,
+          time: "3h"
+        },
+        {
+          id: 2,
+          user: "Diego",
+          avatar: "https://randomuser.me/api/portraits/men/55.jpg",
+          text: "Siempre me pone triste pero en el buen sentido.",
+          likes: 9,
+          time: "6h"
+        }
+      ]
+    },
+
+    {
+      title: "Weird Fishes/Arpeggi",
+      duration: "5:18",
+      rating: 9.8,
+      reviewText: "Definitivamente la mejor del album, una obra maestra.",
+      comments: [
+        {
+          id: 1,
+          user: "Sofía",
+          avatar: "https://randomuser.me/api/portraits/women/66.jpg",
+          text: "Top 3 canciones de Radiohead fácil.",
+          likes: 25,
+          time: "1h"
+        },
+        {
+          id: 2,
+          user: "Andrés",
+          avatar: "https://randomuser.me/api/portraits/men/77.jpg",
+          text: "La progresión es hipnótica, no hay otra palabra.",
+          likes: 18,
+          time: "4h"
+        }
+      ]
+    },
+
+    {
+      title: "All I Need",
+      duration: "3:48",
+      rating: 9.2,
+      comments: [
+        {
+          id: 1,
+          user: "Mariana",
+          avatar: "https://randomuser.me/api/portraits/women/88.jpg",
+          text: "La producción aquí es brutal.",
+          likes: 7,
+          time: "8h"
+        }
+      ]
+    },
+
+    {
+      title: "Faust Arp",
+      duration: "2:09",
+      rating: 8.0,
+      reviewText: "Un pequeño oasis de belleza minimalista.",
+      comments: [
+        {
+          id: 1,
+          user: "Jorge",
+          avatar: "https://randomuser.me/api/portraits/men/91.jpg",
+          text: "Muy infravalorada.",
+          likes: 4,
+          time: "2d"
+        }
+      ]
+    },
+
+    {
+      title: "Reckoner",
+      duration: "4:50",
+      rating: 9.7,
+      reviewText: "Una de las líneas de guitarra más memorables.",
+      comments: [
+        {
+          id: 1,
+          user: "Fernanda",
+          avatar: "https://randomuser.me/api/portraits/women/99.jpg",
+          text: "Esta canción me cambia el mood completamente.",
+          likes: 20,
+          time: "3h"
+        },
+        {
+          id: 2,
+          user: "Ricardo",
+          avatar: "https://randomuser.me/api/portraits/men/100.jpg",
+          text: "El clímax final es increíble.",
+          likes: 11,
+          time: "7h"
+        }
+      ]
+    }
   ],
+
   metrics: [
     { label: 'Ritmo', value: 9.5 },
     { label: 'Melodía', value: 9.8 },
@@ -122,7 +268,7 @@ export default function ReviewDetailPage() {
               ))}
             </div>
             {/* Tracklist Section */}
-            <TracklistReview reviewData={reviewData} />
+            <TracklistReview reviewData={reviewData} comments={reviewData.tracklist} />
           </article>
         </div>
         

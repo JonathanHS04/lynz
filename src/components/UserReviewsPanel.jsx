@@ -3,7 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Heart, MessageSquareMore, Star } from 'lucide-react';
 import { getRatingFont } from '@/utils/getRatingStyle';
-import RatingSquare from './RatingSquare';
+import RatingSquare from './Rating/RatingSquare';
 import LikeAndComment from './LikeAndComment';
 import { useState } from 'react';
 

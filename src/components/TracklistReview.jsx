@@ -1,7 +1,7 @@
 import React from 'react'
 import { MessageSquare, Quote } from 'lucide-react'
 import getRatingStyle from '@/utils/getRatingStyle';
-import RatingSquare from './RatingSquare';
+import RatingSquare from './Rating/RatingSquare';
 import Link from 'next/link';
 
 const TracklistReview = ({ reviewData }) => {
@@ -58,6 +58,8 @@ const TracklistReview = ({ reviewData }) => {
                     </p>
                   </div>
                 ) : (<></>)}
+
+                
 
                 {/* Tags rápidos de la canción (Opcional) */}
                 <div className="mt-4 flex gap-2 overflow-x-auto pb-2">

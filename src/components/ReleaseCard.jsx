@@ -2,7 +2,7 @@ import React from 'react'
 import Link from 'next/link';
 import { Star } from 'lucide-react';
 import { getRatingFont, getRatingBorder } from '@/utils/getRatingStyle';
-import RatingSquare from './RatingSquare';
+import RatingSquare from './Rating/RatingSquare';
 
 const ReleaseCard = ({release, author=false}) => {
     return (

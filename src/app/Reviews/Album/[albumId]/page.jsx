@@ -1,38 +1,17 @@
-"use client";
-
-import React, { useState, useMemo } from "react";
+import React from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import {
-    Heart,
-    MessageSquareMore,
-    SlidersHorizontal,
-    ChevronLeft,
-    ChevronRight,
-    Star,
-    ArrowUpRight,
-    ArrowDownWideNarrow
-} from "lucide-react";
+import { Star } from "lucide-react";
 
 import { getRatingFont } from "@/utils/getRatingStyle";
 import { albumData, userReviews } from "./mockData";
-import RatingSquare from "@/components/RatingSquare";
-import LikeAndComment from "@/components/LikeAndComment";
+import RatingSquare from "@/components/Rating/RatingSquare";
 import BackButton from "@/components/BackButton";
 import SonicProfile from "@/components/SonicProfile";
-import { formatRelativeTime } from "@/utils/formatTime"; // Ajusta la ruta según tu carpeta
-import ReviewsExplorer from "./components/ReviewsExplorer";
+import ReviewsExplorer from "@/components/ReviewsExplorer/ReviewsExplorer";
 
 export default function ReviewsPage() {
-    const router = useRouter();
     const data = albumData;
     const albumId = String(albumData.id);
-
-    const [reviewsState, setReviewsState] = useState(
-        userReviews.map((r) => ({ ...r, liked: false }))
-    );
-
-    
 
     const toggleLike = (reviewId) => {
         setReviewsState((reviews) =>
@@ -88,7 +67,7 @@ export default function ReviewsPage() {
 
                             <div className="flex items-center gap-6 text-sm text-zinc-400">
                                 <RatingSquare rating={data.rating} variant="inline" />
-                                <span>{reviewsState.length} reseñas</span>
+                                <span>{userReviews.length} reseñas</span>
                             </div>
                         </div>
                     </div>
@@ -102,7 +81,7 @@ export default function ReviewsPage() {
 
                     {/* IZQUIERDA */}
                     <div className="space-y-8">
-                        <ReviewsExplorer reviewsState={reviewsState} setReviewsState={setReviewsState}/>
+                        <ReviewsExplorer userReviews={userReviews} type={"album"}/>
                     </div>
 
                     {/* SIDEBAR */}
@@ -122,11 +101,10 @@ export default function ReviewsPage() {
 
                             <div className="flex justify-between mt-2">
                                 <span className="text-zinc-400">Reseñas</span>
-                                <span>{reviewsState.length}</span>
+                                <span>{userReviews.length}</span>
                             </div>
                         </div>
                             <SonicProfile data={albumData} metrics={albumData.metrics} image={false} />
-
                     </aside>
                 </div>
             </main>

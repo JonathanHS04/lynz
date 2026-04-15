@@ -1,18 +1,34 @@
+"use client";
 import React from 'react'
 import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { SlidersHorizontal, ArrowDownWideNarrow, ChevronLeft, ChevronRight, ArrowUpRight } from "lucide-react";
-import Link from 'next/link';
-import { albumData, userReviews } from '../mockData';
-import RatingSquare from '@/components/RatingSquare';
-import LikeAndComment from '@/components/LikeAndComment';
-import { formatRelativeTime } from '@/utils/formatTime';
-import ReviewCard from './ReviewCard';
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import ReviewCardAlbum from './ReviewCardAlbum';
 import ReviewFilters from './ReviewFilters';
+import SongCommentsThread from './SongCommentsThread';
 
-const ReviewsExplorer = ({ reviewsState, setReviewsState }) => {
+const ReviewsExplorer = ({ userReviews, artistsPerformance, type, sonicMetrics = [], sonicImage, sonicTitle, sonicSubtitle }) => {
     const router = useRouter();
+    const [reviewsState, setReviewsState] = useState(
+        userReviews.map((r) => ({ ...r, liked: false }))
+    );
 
+    if (type === "song") {
+        return (
+            <SongCommentsThread
+                initialComments={reviewsState}
+                defaultSonicProfile={sonicMetrics}
+                artistsPerformance={artistsPerformance}
+                sonicImage={sonicImage}
+                sonicTitle={sonicTitle}
+                sonicSubtitle={sonicSubtitle}
+            />
+        );
+    }
+
+    let ReviewCard;
+
+    if (type === "album") ReviewCard = ReviewCardAlbum;
 
     const [sort, setSort] = useState("top");
 
@@ -76,7 +92,6 @@ const ReviewsExplorer = ({ reviewsState, setReviewsState }) => {
     );
     return (
         <>
-            {/* TOP BAR - Reemplaza solo este div y el bloque de showFilters */}
             <ReviewFilters sort={sort} setSort={setSort} sortOrder={sortOrder}
                 setSortOrder={setSortOrder} showFilters={showFilters}
                 setShowFilters={setShowFilters} filters={filters} setFilters={setFilters} />
