@@ -9,14 +9,26 @@ export const searchMockData = [
     image: 'https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages221/v4/f5/7c/21/f57c21d6-590a-b07e-1027-e92e6c62cfe6/ami-identity-cee5abcdd03c2870378144a376dce33d-2025-04-18T00-19-44.218Z_cropped.png/486x486bb.png',
   },
   {
-    id: 'artist-bad-gyal',
-    type: 'artist',
-    title: 'Bad Gyal',
-    subtitle: 'Dancehall / Reggaetón / Pop Urbano',
-    meta: '8.1M oyentes mensuales',
-    href: '/Artist/2',
-    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6v5uBzxRFt5jpsC33cGOUhBwB7NTSuoBo7A&s',
+      id: 'artist-bad-gyal',
+      type: 'artist',
+      title: 'Bad Gyal',
+      subtitle: 'Dancehall / Reggaetón / Pop Urbano',
+      meta: '8.1M oyentes mensuales',
+      href: '/Artist/3',  // ← antes era /Artist/2
+      image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6v5uBzxRFt5jpsC33cGOUhBwB7NTSuoBo7A&s',
   },
+  
+  {
+      id: 'artist-twenty-one-pilots',
+      type: 'artist',
+      title: 'Twenty One Pilots',
+      subtitle: 'Alternative Rock / Indie Pop / Electropop',
+      meta: '39M oyentes mensuales',
+      href: '/Artist/2',
+      image: 'https://i.scdn.co/image/ab6761610000517461a7ea26d33ded218cd1e59d',
+  },
+
+
   {
     id: 'album-psmne',
     type: 'album',

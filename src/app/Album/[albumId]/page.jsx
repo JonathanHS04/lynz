@@ -1,4 +1,7 @@
+"use client";
+
 import React from 'react';
+import { useParams } from 'next/navigation';
 import { getRatingFont } from '@/utils/getRatingStyle';
 import { Star } from 'lucide-react';
 import Link from 'next/link';
@@ -13,6 +16,10 @@ import SonicProfile from '@/components/SonicProfile';
 import { albumData, userReviews } from './mockData';
 
 export default function AlbumPage() {
+    const params = useParams();
+    const albumId = Number(params.albumId);
+    const albumData = albums.find(a => a.id === albumId) || albums[0];
+
     return (
         <div className="min-h-screen bg-[#0a0a0a] text-white py-12">
 
@@ -39,7 +46,7 @@ export default function AlbumPage() {
                             </h1>
 
                             <div className="flex items-center gap-4 text-gray-400 font-medium">
-                                <Link href={`/Artist/${albumData.artistId}`}className="cursor-pointer transition-colors text-lg text-white font-bold hover:text-violet-500">{albumData.artist}</Link>
+                                <Link href={`/Artist/${albumData.artistId}`} className="cursor-pointer transition-colors text-lg text-white font-bold hover:text-violet-500">{albumData.artist}</Link>
                                 <span className="w-1 h-1 rounded-full bg-gray-600" />
                                 <span className="text-sm uppercase tracking-wider">{albumData.genre}</span>
                                 <span className="w-1 h-1 rounded-full bg-gray-600" />
@@ -47,7 +54,6 @@ export default function AlbumPage() {
                             </div>
                             <RatingAndQuickActions rating={albumData.rating} ratingHref={`/Reviews/Album/${albumData.id}`} />
                         </div>
-                        
                     </div>
                 </div>
             </header>
@@ -55,11 +61,7 @@ export default function AlbumPage() {
             {/* --- CONTENT SECTION --- */}
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
-
-                    {/* Columna Izquierda: Tracklist */}
                     <Tracklist tracks={albumData.tracks}/>
-
-                    {/* Columna Derecha: Sidebar Rediseñado */}
                     <aside className="space-y-12">
                         <Profile data={albumData} />
                         <SonicProfile data={albumData} metrics={albumData.metrics} image={false}/>

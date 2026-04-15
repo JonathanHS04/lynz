@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import Tracklist from '@/components/Tracklist';
 import SonicProfile from '@/components/SonicProfile';
@@ -11,12 +13,10 @@ const sectionLabel = 'text-[10px] font-black uppercase tracking-[0.35em] text-zi
 
 export default function ArtistPage() {
 
-
     return (
         <div className="min-h-screen bg-[#0a0a0a] text-white">
 
             <ArtistHero artistData={artistData} />
-
 
             <main className="max-w-7xl mx-auto px-6 py-14 space-y-14">
 
@@ -46,16 +46,13 @@ export default function ArtistPage() {
 
                     <aside className="space-y-8 lg:top-24 self-start">
                         <h2 className='text-3xl font-black'>Biografía</h2>
-
                         <Profile data={artistData} />
 
                         <SonicProfile data={artistData} metrics={artistData.sonicProfile} image={false} />
 
 
                     </aside>
-
                 </section>
-
             </main>
         </div>
     );
