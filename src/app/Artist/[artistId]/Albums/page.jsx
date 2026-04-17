@@ -3,8 +3,13 @@ import { artistData } from '../mockData';
 import ArtistHero from '../components/ArtistHero';
 import BackButton from '@/components/BackButton';
 import Releases from '../components/Releases';
+import { getArtistData } from '@/services/artist';
 
-const page = () => {
+const page = async ({params}) => {
+  const resolvedParams = await params;
+  const artistData = await getArtistData(resolvedParams.artistId);
+  
+
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
         <ArtistHero artistData={artistData} />

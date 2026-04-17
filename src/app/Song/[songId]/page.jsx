@@ -1,5 +1,4 @@
 import React from 'react';
-import { getRatingFont, getRatingBorder, getRatingHoverBorder } from '@/utils/getRatingStyle';
 import { Play, Disc, Star, Clock, Hash } from 'lucide-react';
 import RatingAndQuickActions from '@/components/Rating/RatingAndQuickActions';
 import RankingInfoSong from '@/components/RankingInfoSong';
@@ -7,13 +6,20 @@ import Link from 'next/link';
 import UserReviewsPanel from '@/components/UserReviewsPanel';
 import Profile from '@/components/Profile';
 
-import { userReviews, artistPerformance, songData } from './mockData';
 import SonicProfile from '@/components/SonicProfile';
 import TrackDetails from './components/TrackDetails';
 import BackButton from '@/components/BackButton';
 import ArtistsPerformance from '@/components/ArtistsPerformance';
+import { getTrackData } from '@/services/song';
 
-export default function SongPage() {
+export default async function SongPage({ params }) {
+    const resolvedParams = await params;
+    const songData = await getTrackData(resolvedParams.songId);
+
+    if (!songData) {
+        return <div>Song not found</div>;
+    }
+
     return (
         <div className="min-h-screen bg-[#0a0a0a] text-white">
 
@@ -56,7 +62,7 @@ export default function SongPage() {
                                     )}
                                 </div>
                             </div>
-                            <RatingAndQuickActions rating={songData.rating} ratingHref={`/Reviews/Song/${songData.id}`} />
+                            <RatingAndQuickActions rating={songData.rating} ratingHref={`/Reviews/Song/${songData.id}`} links={songData.externalLinks} />
                         </div>
                     </div>
                 </div>
@@ -73,10 +79,10 @@ export default function SongPage() {
 
                     {/* IZQUIERDA: MÉTRICAS Y PERFORMANCE */}
                     <div className="space-y-12">
-                        <SonicProfile data={songData} metrics={songData.metrics} />
+                        <SonicProfile data={songData} metrics={songData.sonicProfile} />
 
                         {/* PERFORMANCE */}
-                        <ArtistsPerformance artistPerformance={artistPerformance} />
+                        <ArtistsPerformance artistPerformance={songData.artistPerformance} />
                     </div>
 
                     {/* DERECHA: RANKINGS Y REVIEWS */}
@@ -90,7 +96,7 @@ export default function SongPage() {
                             <RankingInfoSong songData={songData} cols={2} />
                         </div>
 
-                        <UserReviewsPanel reviews={userReviews} Id={songData.id} type="Song" />
+                        <UserReviewsPanel reviews={songData.userReviews} Id={songData.id} type="Song" />
                     </aside>
 
                 </div>

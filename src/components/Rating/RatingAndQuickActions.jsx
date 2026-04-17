@@ -6,9 +6,8 @@ import { SiApplemusic } from "react-icons/si";
 
 const RatingAndQuickActions = ({
   rating,
+  links,
   ratingHref = '#',
-  spotifyUrl = "#",
-  appleUrl = "#",
   type = "default"
 }) => {
   return (
@@ -22,18 +21,19 @@ const RatingAndQuickActions = ({
       {/* ACTIONS */}
       <div className="flex items-center gap-4">
 
-        {/* RATE */}
-        <button className="group flex items-center gap-3 rounded-full border border-white/20 bg-white/5 px-5 py-4 text-sm font-bold tracking-wide text-white transition-all active:scale-95 cursor-pointer hover:bg-white/10">
-          <Star className="w-5 h-5 text-zinc-400 group-hover:text-white transition-colors" />
-          <span className="uppercase text-xs tracking-wider text-zinc-400 group-hover:text-white transition-colors">
-            Calificar
-          </span>
-        </button>
+        {type !== "artist" && (
+          <button className="group flex items-center gap-3 rounded-full border border-white/20 bg-white/5 px-5 py-4 text-sm font-bold tracking-wide text-white transition-all active:scale-95 cursor-pointer hover:bg-white/10">
+            <Star className="w-5 h-5 text-zinc-400 group-hover:text-white transition-colors" />
+            <span className="uppercase text-xs tracking-wider text-zinc-400 group-hover:text-white transition-colors">
+              Calificar
+            </span>
+          </button>
+        )}
 
         {/* SPOTIFY */}
-        {spotifyUrl && (
+        {links?.spotify && (
           <a
-            href={spotifyUrl}
+            href={links.spotify}
             target="_blank"
             rel="noopener noreferrer"
             className="group rounded-full border border-white/10 bg-white/5 p-4 transition-all active:scale-95 hover:shadow-[0_0_20px_rgba(29,185,84,0.35)]"
@@ -43,9 +43,9 @@ const RatingAndQuickActions = ({
         )}
 
         {/* APPLE MUSIC */}
-        {appleUrl && (
+        {links?.appleMusic && (
           <a
-            href={appleUrl}
+            href={links.appleMusic}
             target="_blank"
             rel="noopener noreferrer"
             className="group rounded-full border border-white/10 bg-white/5 p-4 transition-all active:scale-95 hover:shadow-[0_0_20px_rgba(250,35,59,0.35)]"

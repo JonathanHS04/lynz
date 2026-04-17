@@ -2,15 +2,17 @@ import React from "react";
 import Link from "next/link";
 import { Disc } from "lucide-react";
 
-import { songData, userReviews, artistsPerformance } from "./mockData";
+import { userReviews, artistsPerformance } from "./mockData";
 import RatingSquare from "@/components/Rating/RatingSquare";
 import BackButton from "@/components/BackButton";
 import ReviewsExplorer from "@/components/ReviewsExplorer/ReviewsExplorer";
 import { getRatingFont } from "@/utils/getRatingStyle";
 import SonicProfile from "@/components/SonicProfile";
+import { getBasicInfo } from "@/services/basicInfo";
 
-export default function SongReviewsPage() {
-    const data = songData;
+export default async function SongReviewsPage({params}) {
+    const resolvedParams = await params;
+    const data = await getBasicInfo(resolvedParams.songId, 'song');
 
     return (
         <div className="min-h-screen bg-[#0a0a0a] text-white">
@@ -85,13 +87,13 @@ export default function SongReviewsPage() {
 
             {/* CONTENT (sin sidebar) */}
             <main className="max-w-5xl mx-auto px-4 space-y-8">
-                <SonicProfile data={data} metrics={data.metrics} image={false} oneLine={true} header={false} />
+                <SonicProfile data={data} metrics={data.sonicProfile} image={false} oneLine={true} header={false} />
 
                 {/* EXPLORER */}
                 <ReviewsExplorer
                     userReviews={userReviews}
                     type={"song"}
-                    sonicMetrics={data.metrics}
+                    sonicMetrics={data.sonicProfile}
                     artistsPerformance={artistsPerformance}
                     sonicImage={data.image}
                     sonicTitle={data.title}

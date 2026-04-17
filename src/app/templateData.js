@@ -1,28 +1,25 @@
 export const featuredAlbum = {
-  id: 1,
+  id: "22047c46-51da-4762-abd0-e31191e6610f",
   artist: "Omar Courtz",
   album: "POR SI MAÑANA NO ESTOY",
   score: 9.4,
   image: "https://i1.sndcdn.com/artworks-72d80e69-18fe-4175-b049-3393db902285-0-t500x500.jpg",
   genre: "Reguetón/Trap Latino",
-  summary: "Una reimaginación sonora que eleva la obra maestra original a nuevas alturas conceptuales."
 };
 
 export const featuredSong = {
-  id: 1,
+  id: "cd132e69-1be3-4b78-a36c-f6042b3bde50",
   artist: "Tainy",
   title: "Monstruo",
   score: 9.6,
   image: "https://es.rollingstone.com/wp-content/uploads/2025/10/Tainy-comienza-un-nuevo-capitulo-junto-a-Feid-con-Monstruo-1.jpg",
   genre: "Reguetón/Trap Latino",
-  summary: "Una colaboración explosiva que fusiona ritmos urbanos con una producción impecable, creando un himno moderno."
 };
 
 export const featuredArtist = {
   id: 1,
   name: "Omar Courtz",
   rating: 9.7,
-  monthlyListeners: "12.4M",
   city: "Puerto Rico",
   genre: "Reggaetón / Trap Latino / Experimental",
   image: "https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages221/v4/f5/7c/21/f57c21d6-590a-b07e-1027-e92e6c62cfe6/ami-identity-cee5abcdd03c2870378144a376dce33d-2025-04-18T00-19-44.218Z_cropped.png/1280x720bb.png",

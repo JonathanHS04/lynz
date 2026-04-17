@@ -1,24 +1,20 @@
-"use client";
-
 import React from 'react';
-import { useParams } from 'next/navigation';
-import { getRatingFont } from '@/utils/getRatingStyle';
-import { Star } from 'lucide-react';
 import Link from 'next/link';
-import RatingButton from '@/components/Rating/RatingButton';
-import InteractiveRating from '@/components/InteractiveRating';
 import Tracklist from '@/components/Tracklist';
 import RatingAndQuickActions from '@/components/Rating/RatingAndQuickActions';
 import RankingInfo from '@/components/RankingInfo';
-import Profile from '@/components/Profile';
 import UserReviewsPanel from '@/components/UserReviewsPanel';
 import SonicProfile from '@/components/SonicProfile';
-import { albumData, userReviews } from './mockData';
+import { formatTotalDuration } from '@/utils/formatTime';
+import { getAlbumData } from '@/services/album';
 
-export default function AlbumPage() {
-    const params = useParams();
-    const albumId = Number(params.albumId);
-    const albumData = albums.find(a => a.id === albumId) || albums[0];
+export default async function AlbumPage({params}) {
+    const resolvedParams = await params;
+    const albumData = await getAlbumData(resolvedParams.albumId);
+
+    if (!albumData) {
+        return <div className="min-h-screen bg-[#0a0a0a] text-white">Album not found</div>;
+    }
 
     return (
         <div className="min-h-screen bg-[#0a0a0a] text-white py-12">
@@ -50,7 +46,7 @@ export default function AlbumPage() {
                                 <span className="w-1 h-1 rounded-full bg-gray-600" />
                                 <span className="text-sm uppercase tracking-wider">{albumData.genre}</span>
                                 <span className="w-1 h-1 rounded-full bg-gray-600" />
-                                <span className="text-sm">{albumData.releaseDate}</span>
+                                <span className="text-sm">{albumData.releaseYear} • {albumData.tracks.length} canciones • {formatTotalDuration(albumData.duration)}</span>
                             </div>
                             <RatingAndQuickActions rating={albumData.rating} ratingHref={`/Reviews/Album/${albumData.id}`} />
                         </div>
@@ -63,9 +59,9 @@ export default function AlbumPage() {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
                     <Tracklist tracks={albumData.tracks}/>
                     <aside className="space-y-12">
-                        <Profile data={albumData} />
-                        <SonicProfile data={albumData} metrics={albumData.metrics} image={false}/>
-                        <UserReviewsPanel reviews={userReviews} Id={albumData.id} type="Album" />
+                        <SonicProfile data={albumData} metrics={albumData.sonicProfile} image={false}/>
+                        <RankingInfo rankings={albumData.rankings} />
+                        <UserReviewsPanel reviews={albumData.userReviews} Id={albumData.id} type="Album" />
                     </aside>
                 </div>
             </main>

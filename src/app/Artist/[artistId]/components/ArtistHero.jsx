@@ -29,7 +29,7 @@ const artistHero = ({artistData}) => {
                                 {genre}
                             </span>))}
                     </div>
-                    <RatingAndQuickActions rating={artistData.rating} ratingHref={`/Reviews/Artist/${artistData.name}`} type='artist' />
+                    <RatingAndQuickActions rating={artistData.rating} ratingHref={`/Reviews/Artist/${artistData.name}`} type='artist' links={artistData.externalLinks} />
                 </div>
             </div>
         </div>

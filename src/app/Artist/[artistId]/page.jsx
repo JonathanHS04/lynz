@@ -1,17 +1,17 @@
-"use client";
-
 import React from 'react';
 import Tracklist from '@/components/Tracklist';
 import SonicProfile from '@/components/SonicProfile';
-import Profile from '@/components/Profile';
-import { artistData } from './mockData';
 import Releases from './components/Releases';
 import ArtistHero from './components/ArtistHero';
+import RankingInfo from '@/components/RankingInfo';
+import { getArtistData } from '@/services/artist';
 
 const sectionLabel = 'text-[10px] font-black uppercase tracking-[0.35em] text-zinc-500';
 
 
-export default function ArtistPage() {
+export default async function ArtistPage({params}) {
+    const resolvedParams = await params;
+    const artistData = await getArtistData(resolvedParams.artistId);
 
     return (
         <div className="min-h-screen bg-[#0a0a0a] text-white">
@@ -45,11 +45,9 @@ export default function ArtistPage() {
 
 
                     <aside className="space-y-8 lg:top-24 self-start">
-                        <h2 className='text-3xl font-black'>Biografía</h2>
-                        <Profile data={artistData} />
 
                         <SonicProfile data={artistData} metrics={artistData.sonicProfile} image={false} />
-
+                        <RankingInfo rankings={artistData.rankings} />
 
                     </aside>
                 </section>

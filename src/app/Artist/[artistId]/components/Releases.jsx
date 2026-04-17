@@ -4,7 +4,7 @@ import ReleaseCard from '@/components/ReleaseCard';
 import Link from 'next/link';
 
 const Releases = ({ artistId, releases, sectionLabel, size="default" }) => {
-    const [displayLimit, setDisplayLimit] = useState(size === "large" ? 999 : 2);
+    const [displayLimit, setDisplayLimit] = useState(size === "large" ? 999 : 3);
 
     const gridClass = size === "large" ? "grid-cols-3 xl:grid-cols-5 gap-6" : "grid-cols-2 xl:grid-cols-3 gap-6";
 

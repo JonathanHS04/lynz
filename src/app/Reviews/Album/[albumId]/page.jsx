@@ -3,29 +3,16 @@ import Link from "next/link";
 import { Star } from "lucide-react";
 
 import { getRatingFont } from "@/utils/getRatingStyle";
-import { albumData, userReviews } from "./mockData";
+import { userReviews } from "./mockData";
 import RatingSquare from "@/components/Rating/RatingSquare";
 import BackButton from "@/components/BackButton";
 import SonicProfile from "@/components/SonicProfile";
 import ReviewsExplorer from "@/components/ReviewsExplorer/ReviewsExplorer";
+import { getBasicInfo } from "@/services/basicInfo";
 
-export default function ReviewsPage() {
-    const data = albumData;
-    const albumId = String(albumData.id);
-
-    const toggleLike = (reviewId) => {
-        setReviewsState((reviews) =>
-            reviews.map((r) =>
-                r.id === reviewId
-                    ? {
-                        ...r,
-                        liked: !r.liked,
-                        likes: r.liked ? r.likes - 1 : r.likes + 1,
-                    }
-                    : r
-            )
-        );
-    };
+export default async function ReviewsPage({params}) {
+    const resolvedParams = await params;
+    const data = await getBasicInfo(resolvedParams.albumId, 'album');
 
     return (
         <div className="min-h-screen bg-[#0a0a0a] text-white">
@@ -104,7 +91,7 @@ export default function ReviewsPage() {
                                 <span>{userReviews.length}</span>
                             </div>
                         </div>
-                            <SonicProfile data={albumData} metrics={albumData.metrics} image={false} />
+                            <SonicProfile data={data} metrics={data.sonicProfile} image={false} />
                     </aside>
                 </div>
             </main>

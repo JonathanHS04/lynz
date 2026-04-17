@@ -1,6 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { getRatingFont, getRatingHoverBorder } from '@/utils/getRatingStyle';
+import { formatDuration } from '@/utils/formatTime';
 
 const Tracklist = ({ tracks, images=false }) => {
     return (
@@ -61,7 +62,7 @@ const Tracklist = ({ tracks, images=false }) => {
                             </div>
 
                             <span className="text-xs text-zinc-500 font-mono w-12 text-right group-hover:text-zinc-300">
-                                {track.duration}
+                                {formatDuration(track.duration)}
                             </span>
 
                         </div>

@@ -22,3 +22,22 @@ export const formatRelativeTime = (dateInput) => {
     year: 'numeric',
   });
 };
+
+export const formatDuration = (ms) => {
+  if (!ms) return "0:00";
+  const minutes = Math.floor(ms / 60000);
+  const seconds = ((ms % 60000) / 1000).toFixed(0);
+  return `${minutes}:${seconds.padStart(2, '0')}`;
+}
+
+// Función auxiliar para duraciones largas (Horas y Minutos)
+export function formatTotalDuration(ms) {
+  const totalSeconds = Math.floor(ms / 1000);
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+
+  if (hours > 0) {
+    return `${hours} h ${minutes} min`;
+  }
+  return `${minutes} min`;
+}
