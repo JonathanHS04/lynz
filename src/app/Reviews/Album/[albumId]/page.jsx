@@ -8,11 +8,11 @@ import RatingSquare from "@/components/Rating/RatingSquare";
 import BackButton from "@/components/BackButton";
 import SonicProfile from "@/components/SonicProfile";
 import ReviewsExplorer from "@/components/ReviewsExplorer/ReviewsExplorer";
-import { getBasicInfo } from "@/services/basicInfo";
+import { getAlbumData } from "@/services/album";
 
 export default async function ReviewsPage({params}) {
     const resolvedParams = await params;
-    const data = await getBasicInfo(resolvedParams.albumId, 'album');
+    const data = await getAlbumData(resolvedParams.albumId, "basic");
 
     return (
         <div className="min-h-screen bg-[#0a0a0a] text-white">

@@ -8,11 +8,11 @@ import BackButton from "@/components/BackButton";
 import ReviewsExplorer from "@/components/ReviewsExplorer/ReviewsExplorer";
 import { getRatingFont } from "@/utils/getRatingStyle";
 import SonicProfile from "@/components/SonicProfile";
-import { getBasicInfo } from "@/services/basicInfo";
+import { getSongData } from "@/services/song";
 
 export default async function SongReviewsPage({params}) {
     const resolvedParams = await params;
-    const data = await getBasicInfo(resolvedParams.songId, 'song');
+    const data = await getSongData(resolvedParams.songId, 'basic');
 
     return (
         <div className="min-h-screen bg-[#0a0a0a] text-white">

@@ -48,7 +48,7 @@ export default async function AlbumPage({params}) {
                                 <span className="w-1 h-1 rounded-full bg-gray-600" />
                                 <span className="text-sm">{albumData.releaseYear} • {albumData.tracks.length} canciones • {formatTotalDuration(albumData.duration)}</span>
                             </div>
-                            <RatingAndQuickActions rating={albumData.rating} ratingHref={`/Reviews/Album/${albumData.id}`} />
+                            <RatingAndQuickActions rating={albumData.rating} ratingHref={`/Reviews/Album/${albumData.id}`} links={albumData.externalLinks}/>
                         </div>
                     </div>
                 </div>

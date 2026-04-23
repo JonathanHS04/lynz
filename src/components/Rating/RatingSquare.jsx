@@ -36,7 +36,7 @@ const RatingSquare = ({ rating, variant = "default" }) => {
         strokeWidth={2.2}
       />
       <span className={`${variant === "review" ? "" : "text-sm font-black"}`}>
-        {safeRating === null ? "--" : safeRating.toFixed(1)}
+        {safeRating === null ? "N/A" : safeRating.toFixed(1)}
       </span>
     </div>
   );

@@ -30,7 +30,7 @@ const RatingButton = ({ href = '#', rating, type = "default" }) => {
             `}>
                 <Star className="w-12 h-12 fill-current" strokeWidth={2.5} />
                 <span className="text-5xl font-black tracking-tighter">
-                    {(rating < 10 ? rating.toFixed(1) : rating.toFixed(0))}
+                    {(rating ? (rating < 10 ? rating.toFixed(1) : rating.toFixed(0)) : 'N/A')}
                 </span>
             </div>
             

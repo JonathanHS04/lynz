@@ -10,11 +10,11 @@ import SonicProfile from '@/components/SonicProfile';
 import TrackDetails from './components/TrackDetails';
 import BackButton from '@/components/BackButton';
 import ArtistsPerformance from '@/components/ArtistsPerformance';
-import { getTrackData } from '@/services/song';
+import { getSongData } from '@/services/song';
 
 export default async function SongPage({ params }) {
     const resolvedParams = await params;
-    const songData = await getTrackData(resolvedParams.songId);
+    const songData = await getSongData(resolvedParams.songId);
 
     if (!songData) {
         return <div>Song not found</div>;
