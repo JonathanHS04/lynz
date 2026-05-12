@@ -6,7 +6,7 @@ import { MapPin } from 'lucide-react';
 
 const artistsData = [
     {
-        id: 1,
+        id: "61ee1029-4f35-43ce-83dd-2eb8d4eef85e",
         name: 'Omar Courtz',
         country: 'Puerto Rico',
         genre: 'Reggaetón / Trap Latino',
@@ -16,7 +16,7 @@ const artistsData = [
         tags: ['Reggaetón', 'Trap Latino', 'Alt Urbano'],
     },
     {
-        id: 2,
+        id: "a6c6897a-7415-4f8d-b5a5-3a5e05f3be67",
         name: 'Twenty One Pilots',
         country: 'Columbus, Ohio',
         genre: 'Alternative Rock / Indie',
@@ -26,7 +26,7 @@ const artistsData = [
         tags: ['Alternative Rock', 'Indie Pop', 'Electropop'],
     },
     {
-        id: 3,
+        id: "9cb2e99f-d0ba-4aa5-a371-0006b0d34090",
         name: 'Bad Gyal',
         country: 'Barcelona, España',
         genre: 'Dancehall / Reggaetón',

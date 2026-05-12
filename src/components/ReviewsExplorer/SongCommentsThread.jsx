@@ -416,7 +416,7 @@ const SongCommentsThread = ({ artistsPerformance = [], initialComments = [], def
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <div className="flex items-center gap-3">
                         <h3 className="text-2xl font-black tracking-tight text-white">
-                            {commentCount} comentarios
+                            {commentCount} reseñas
                         </h3>
                     </div>
 
@@ -429,44 +429,6 @@ const SongCommentsThread = ({ artistsPerformance = [], initialComments = [], def
                         >
                             Ordenar por: {sortMode === "top" ? "principales" : "más recientes"}
                         </button>
-                    </div>
-                </div>
-
-                <div className="flex gap-4">
-                    <Avatar username={currentUser.username} initials={currentUser.initials} />
-
-                    <div className="flex-1">
-                        <textarea
-                            value={newCommentText}
-                            onFocus={() => setComposerActive(true)}
-                            onChange={(event) => setNewCommentText(event.target.value)}
-                            rows={1}
-                            placeholder="Añade un comentario..."
-                            className="min-h-[44px] w-full resize-none border-b border-white/10 bg-transparent pb-3 text-sm text-white placeholder:text-zinc-500 focus:border-white/35 focus:outline-none"
-                        />
-
-                        {(composerActive || newCommentText) && (
-                            <div className="mt-3 flex justify-end gap-2">
-                                <button
-                                    type="button"
-                                    onClick={() => {
-                                        setComposerActive(false);
-                                        setNewCommentText("");
-                                    }}
-                                    className="rounded-full px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-zinc-400 transition hover:bg-white/5 hover:text-white"
-                                >
-                                    Cancelar
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={handlePublishComment}
-                                    disabled={!newCommentText.trim()}
-                                    className="rounded-full bg-violet-500 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-white transition hover:bg-violet-400 disabled:cursor-not-allowed disabled:opacity-40"
-                                >
-                                    Comentar
-                                </button>
-                            </div>
-                        )}
                     </div>
                 </div>
 

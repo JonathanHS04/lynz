@@ -3,8 +3,13 @@ import Link from 'next/link';
 import { MapPin, Star, Users } from 'lucide-react';
 import { getRatingBorder, getRatingFont } from '@/utils/getRatingStyle';
 import { searchArtists } from '@/services/search';
+import { getInitials } from '@/utils/getInitials';
 
 function ArtistResultCard({ artist }) {
+
+    // Verificamos si es un placeholder
+    const isPlaceholder = artist.image == null;
+
     return (
         <Link
             href={"/Artist/" + artist.id}
@@ -14,12 +19,20 @@ function ArtistResultCard({ artist }) {
                 <div className="flex flex-col gap-6">
                     <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
                         <div className="flex min-w-0 items-center gap-4">
-                            <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-full border border-white/10 bg-zinc-900 sm:h-24 sm:w-24">
-                                <img
-                                    src={artist.image}
-                                    alt={artist.name}
-                                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                                />
+                            
+                            {/* CONTENEDOR DE IMAGEN / INICIALES */}
+                            <div className="relative h-20 w-20 shrink-0 flex items-center justify-center overflow-hidden rounded-full border border-white/10 bg-zinc-900 sm:h-24 sm:w-24">
+                                {!isPlaceholder ? (
+                                    <img
+                                        src={artist.image}
+                                        alt={artist.name}
+                                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                    />
+                                ) : (
+                                    <span className="text-3xl sm:text-4xl font-black text-white/20 select-none tracking-tighter">
+                                        {getInitials(artist.name)}
+                                    </span>
+                                )}
                             </div>
 
                             <div className="min-w-0">
@@ -43,19 +56,17 @@ function ArtistResultCard({ artist }) {
                         <div className={`inline-flex items-center gap-2 self-start rounded-2xl border px-3 py-2 sm:self-center ${getRatingBorder(artist.rating)}`}>
                             <Star className={`h-4 w-4 fill-current ${getRatingFont(artist.rating)}`} />
                             <span className={`text-2xl font-black ${getRatingFont(artist.rating)}`}>
-                                {artist.rating.toFixed(1)}
+                                {Number(artist.rating).toFixed(1)}
                             </span>
                         </div>
                     </div>
 
                     <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_240px]">
-
                         {/* LEFT: Géneros */}
                         <div className="flex flex-col gap-3">
                             <p className="text-[10px] font-black uppercase tracking-[0.28em] text-zinc-500">
                                 Géneros
                             </p>
-
                             <div className="flex flex-wrap gap-2">
                                 {artist.genres.map((genre) => (
                                     <span
@@ -85,8 +96,6 @@ function ArtistResultCard({ artist }) {
                             ))}
                         </div>
                     </div>
-
-
                 </div>
             </article>
         </Link>

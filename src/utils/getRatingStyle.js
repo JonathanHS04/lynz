@@ -78,8 +78,8 @@ export const getRatingFont = (score, groupHover=false) => {
   }
 
   // [< 5.0] : GRIS (Bajo)
-  if (groupHover) return 'group-hover:text-zinc-600';
-  return 'text-zinc-600';
+  if (groupHover) return 'group-hover:text-red-800';
+  return 'text-red-800';
 };
 
 export const getRatingBorder = (score) => {

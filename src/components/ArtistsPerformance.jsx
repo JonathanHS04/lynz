@@ -3,8 +3,9 @@ import Link from 'next/link';
 import { getRatingFont } from '@/utils/getRatingStyle';
 
 const ArtistsPerformance = ({artistPerformance}) => {
+    console.log(artistPerformance)
     return (
-        <article className="rounded-[2.5rem] bg-zinc-900/20 p-8">
+        <article className="rounded-[2.5rem] p-8">
             <p className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold">Basado en las reseñas</p>
             <h2 className="text-2xl font-black uppercase tracking-tight mb-8">Performance por Artista</h2>
             <div className="space-y-4">
@@ -19,7 +20,7 @@ const ArtistsPerformance = ({artistPerformance}) => {
                                 <p className="text-xs text-zinc-500 uppercase font-bold tracking-widest">{artist.role}</p>
                             </div>
                         </div>
-                        <span className={`text-3xl font-black italic ${getRatingFont(artist.score)}`}>{artist.score.toFixed(1)}</span>
+                        <span className={`text-3xl font-black italic ${getRatingFont(artist.rating)}`}>{artist.rating.toFixed(1)}</span>
                     </div>
                 ))}
             </div>

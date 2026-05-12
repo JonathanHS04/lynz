@@ -9,20 +9,24 @@ import BackButton from "@/components/BackButton";
 import SonicProfile from "@/components/SonicProfile";
 import ReviewsExplorer from "@/components/ReviewsExplorer/ReviewsExplorer";
 import { getAlbumData } from "@/services/album";
+import RatingAndQuickActions from "@/components/Rating/RatingAndQuickActions";
 
-export default async function ReviewsPage({params}) {
+export default async function ReviewsPage({params, searchParams}) {
     const resolvedParams = await params;
-    const data = await getAlbumData(resolvedParams.albumId, "basic");
+    const resolvedSearchParams = await searchParams;
+    const data = await getAlbumData(resolvedParams.albumId);
+    const shouldOpenRating = resolvedSearchParams?.rate === '1';
 
     return (
         <div className="min-h-screen bg-[#0a0a0a] text-white">
 
             {/* HERO */}
-            <header className="relative h-[55vh] flex items-end overflow-hidden border-b border-white/5">
+            <header className="relative h-[60vh] flex items-end overflow-hidden border-b border-white/5">
                 <div className="absolute inset-0">
                     <img
                         src={data.image}
                         className="w-full h-full object-cover scale-150 blur-3xl opacity-20"
+                        alt=""
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent" />
                 </div>
@@ -34,7 +38,8 @@ export default async function ReviewsPage({params}) {
                     <div className="flex items-end gap-6 flex-wrap">
                         <img
                             src={data.image}
-                            className="w-28 h-28 md:w-36 md:h-36 rounded-2xl border border-white/10"
+                            className="w-38 h-38 md:w-50 md:h-50 rounded-2xl border border-white/10"
+                            alt={data.title}
                         />
 
                         <div className="space-y-3">
@@ -52,10 +57,26 @@ export default async function ReviewsPage({params}) {
                                 </Link>
                             </p>
 
-                            <div className="flex items-center gap-6 text-sm text-zinc-400">
-                                <RatingSquare rating={data.rating} variant="inline" />
-                                <span>{userReviews.length} reseñas</span>
-                            </div>
+                            <RatingAndQuickActions
+                                type={"review"}
+                                rating={data.rating}
+                                ratingHref={`/Reviews/Album/${data.id}`}
+                                links={data.externalLinks}
+                                initialModalOpen={shouldOpenRating}
+                                modalType="album"
+                                modalData={{
+                                    id: data.id,
+                                    title: data.title,
+                                    image: data.image,
+                                    artist: data.artist,
+                                    artistId: data.artistId,
+                                    genre: data.genre,
+                                    releaseYear: data.releaseYear,
+                                    duration: data.duration,
+                                    sonicProfile: data.sonicProfile,
+                                    tracks: data.tracks,
+                                }}
+                            />
                         </div>
                     </div>
                 </div>

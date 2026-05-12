@@ -28,7 +28,7 @@ export default async function ArtistPage({params}) {
                         <Releases artistId={artistData.id} releases={artistData.releases} sectionLabel={sectionLabel} />
 
 
-                        {/* TRACKLIST */}
+                        {/* TRACKLIST 
                         <section className="rounded-3xl p-6">
                             <div className="mb-6">
                                 <p className={sectionLabel}>Popular</p>
@@ -39,7 +39,7 @@ export default async function ArtistPage({params}) {
                                 tracks={artistData.topTracks}
                                 images={true}
                             />
-                        </section>
+                        </section>*/}
 
                     </div>
 

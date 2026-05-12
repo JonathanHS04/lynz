@@ -1,5 +1,7 @@
-const AGENT = 'LynzApp/1.0 (jonathanhillmansanchez@gmail.com)';
 import { sonicProfile, rating } from "./mockData";
+
+const AGENT = 'LynzApp/1.0 (jonathanhillmansanchez@gmail.com)';
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export async function getBasicInfo(id, type = 'song') {
   const entity = type === 'song' ? 'recording' : 'release';

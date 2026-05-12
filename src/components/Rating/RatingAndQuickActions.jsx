@@ -1,34 +1,96 @@
-import React from 'react'
+'use client'
+
+import React, { useState } from 'react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import RatingButton from '@/components/Rating/RatingButton';
 import { Share2, Star } from 'lucide-react';
 import { FaSpotify } from "react-icons/fa";
 import { SiApplemusic } from "react-icons/si";
+import AlbumRatingModal from '@/components/Rating/AlbumRatingModal';
+import SongRatingModal from '@/components/Rating/SongRatingModal';
+import { getRatingBorder, getRatingFont } from '@/utils/getRatingStyle';
 
 const RatingAndQuickActions = ({
   rating,
   links,
   ratingHref = '#',
-  type = "default"
+  type = "default",
+  modalData = null,
+  initialModalOpen = false,
+  modalType = 'song',
 }) => {
+  const [isModalOpen, setIsModalOpen] = useState(initialModalOpen)
+  const [submittedRating, setSubmittedRating] = useState(null)
+  const pathname = usePathname()
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const ActiveModal = modalType === 'album' ? AlbumRatingModal : SongRatingModal
+
+  const handleOpenRating = () => {
+    if (pathname === ratingHref) {
+      setIsModalOpen(true)
+      return
+    }
+
+    const params = new URLSearchParams(searchParams.toString())
+    params.set('rate', '1')
+    router.push(`${ratingHref}?${params.toString()}`)
+  }
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false)
+
+    if (pathname !== ratingHref) return
+    if (!searchParams.has('rate')) return
+
+    const params = new URLSearchParams(searchParams.toString())
+    params.delete('rate')
+    const nextQuery = params.toString()
+    router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname, { scroll: false })
+  }
+
+  const handleSubmitRating = ({ overall }) => {
+    setSubmittedRating(overall)
+  }
+
   return (
-    <div className="flex flex-wrap items-center justify-center md:justify-start gap-6">
+    <>
+      <div className="flex flex-wrap items-center justify-center md:justify-start gap-6">
 
-      <RatingButton href={ratingHref} rating={rating} type={type} />
+        <RatingButton href={ratingHref} rating={rating} type={type} />
 
-      {/* DIVIDER */}
-      <div className="h-12 w-[1px] bg-white/10 hidden md:block" />
+        {/* DIVIDER */}
+        <div className="h-12 w-[1px] bg-white/10 hidden md:block" />
 
-      {/* ACTIONS */}
-      <div className="flex items-center gap-4">
+        {/* ACTIONS */}
+        <div className="flex items-center gap-4">
 
-        {type !== "artist" && (
-          <button className="group flex items-center gap-3 rounded-full border border-white/20 bg-white/5 px-5 py-4 text-sm font-bold tracking-wide text-white transition-all active:scale-95 cursor-pointer hover:bg-white/10">
-            <Star className="w-5 h-5 text-zinc-400 group-hover:text-white transition-colors" />
-            <span className="uppercase text-xs tracking-wider text-zinc-400 group-hover:text-white transition-colors">
-              Calificar
-            </span>
-          </button>
-        )}
+          {type !== "artist" && (
+            <button
+              onClick={handleOpenRating}
+              className={`group flex h-[58px] min-w-[148px] items-center justify-center rounded-full border bg-white/5 px-5 text-sm font-bold tracking-wide text-white transition-all active:scale-95 cursor-pointer hover:bg-white/10 ${submittedRating ? `${getRatingBorder(submittedRating)} ${getRatingFont(submittedRating)}` : 'border-white/20'}`}>
+              {submittedRating ? (
+                <span className="flex flex-col items-center justify-center leading-none text-center">
+                  <span className={`uppercase text-[8px] tracking-[0.24em] transition-colors opacity-70 ${getRatingFont(submittedRating)}`}>
+                    Tu rating
+                  </span>
+                  <span className="mt-1 flex items-center gap-2">
+                    <Star className={`w-5 h-5 transition-colors ${getRatingFont(submittedRating)} fill-current opacity-100`} />
+                    <span className={`text-[1.35rem] font-black tracking-[-0.06em] leading-none ${getRatingFont(submittedRating)}`}>
+                      {submittedRating < 10 ? submittedRating.toFixed(1) : submittedRating.toFixed(0)}
+                    </span>
+                  </span>
+                </span>
+              ) : (
+                <span className="flex items-center gap-3">
+                  <Star className="w-5 h-5 text-zinc-400 group-hover:text-white transition-colors" />
+                  <span className="uppercase text-xs tracking-wider text-zinc-400 group-hover:text-white transition-colors">
+                    Calificar
+                  </span>
+                </span>
+              )}
+            </button>
+          )}
 
         {/* SPOTIFY */}
         {links?.spotify && (
@@ -60,7 +122,15 @@ const RatingAndQuickActions = ({
         </button>
 
       </div>
-    </div>
+      </div>
+
+      <ActiveModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onSubmit={handleSubmitRating}
+        {...(modalType === 'album' ? { albumData: modalData } : { songData: modalData })}
+      />
+    </>
   )
 }
 

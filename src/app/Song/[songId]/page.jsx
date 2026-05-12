@@ -62,7 +62,13 @@ export default async function SongPage({ params }) {
                                     )}
                                 </div>
                             </div>
-                            <RatingAndQuickActions rating={songData.rating} ratingHref={`/Reviews/Song/${songData.id}`} links={songData.externalLinks} />
+                            <RatingAndQuickActions rating={songData.rating} ratingHref={`/Reviews/Song/${songData.id}`} links={songData.externalLinks} modalData={{
+                                title: songData.title,
+                                image: songData.image,
+                                artist: songData.artist,
+                                sonicProfile: songData.sonicProfile,
+                                artistPerformance: songData.artistPerformance,
+                            }} />
                         </div>
                     </div>
                 </div>
@@ -88,7 +94,7 @@ export default async function SongPage({ params }) {
                     {/* DERECHA: RANKINGS Y REVIEWS */}
                     <aside className="space-y-8">
                         {/* RANKING ASIDE (Antes era superior) */}
-                        <div className="rounded-[2.5rem] bg-zinc-900/40 backdrop-blur-sm">
+                        <div className="rounded-[2.5rem]">
                             <div className="flex items-center gap-3 mb-6">
                                 <Hash className="text-violet-500 w-5 h-5" />
                                 <h3 className="text-xl font-black uppercase tracking-tight">Rankings</h3>

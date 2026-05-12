@@ -1,9 +1,10 @@
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
 export async function getAlbumData(mbid, type="complete") {
   if (!mbid) return null;
-
   try {
     if (type == "complete") {
-      const response = await fetch(`http://localhost:3001/api/album/${mbid}`);
+      const response = await fetch(`${apiUrl}/album/${mbid}`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -11,7 +12,7 @@ export async function getAlbumData(mbid, type="complete") {
       return data;
       
     } else if (type == "basic") {
-      const response = await fetch(`http://localhost:3001/api/album/basic/${mbid}`);
+      const response = await fetch(`${apiUrl}/album/basic/${mbid}`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }

@@ -4,7 +4,7 @@ import { getRatingBorder, getRatingFont } from '@/utils/getRatingStyle';
 
 const SonicProfile = ({ data, metrics, image=true, header=true, oneLine=false }) => {
     return (
-        <article className="rounded-[2rem] bg-white/[0.02] p-6 md:p-8">
+        <article className="rounded-[2rem] p-6 md:p-8">
 
             {/* HEADER */}
             {header && (

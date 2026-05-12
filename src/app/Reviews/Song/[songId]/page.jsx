@@ -2,17 +2,20 @@ import React from "react";
 import Link from "next/link";
 import { Disc } from "lucide-react";
 
-import { userReviews, artistsPerformance } from "./mockData";
+import { userReviews } from "./mockData";
 import RatingSquare from "@/components/Rating/RatingSquare";
 import BackButton from "@/components/BackButton";
 import ReviewsExplorer from "@/components/ReviewsExplorer/ReviewsExplorer";
 import { getRatingFont } from "@/utils/getRatingStyle";
 import SonicProfile from "@/components/SonicProfile";
 import { getSongData } from "@/services/song";
+import RatingAndQuickActions from "@/components/Rating/RatingAndQuickActions";
 
-export default async function SongReviewsPage({params}) {
+export default async function SongReviewsPage({params, searchParams}) {
     const resolvedParams = await params;
-    const data = await getSongData(resolvedParams.songId, 'basic');
+    const resolvedSearchParams = await searchParams;
+    const songData = await getSongData(resolvedParams.songId, 'basic');
+    const shouldOpenRating = resolvedSearchParams?.rate === '1';
 
     return (
         <div className="min-h-screen bg-[#0a0a0a] text-white">
@@ -23,7 +26,7 @@ export default async function SongReviewsPage({params}) {
                 {/* BACKGROUND */}
                 <div className="absolute inset-0">
                     <img
-                        src={data.image}
+                        src={songData.image}
                         className="w-full h-full object-cover scale-125 blur-3xl opacity-20"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent" />
@@ -39,7 +42,7 @@ export default async function SongReviewsPage({params}) {
                         {/* COVER */}
                         <div className="shrink-0 rounded-full">
                             <img
-                                src={data.image}
+                                src={songData.image}
                                 className="w-36 h-36 md:w-44 md:h-44 rounded-full border border-white/10 shadow-xl"
                             />
                         </div>
@@ -49,32 +52,36 @@ export default async function SongReviewsPage({params}) {
 
                             {/* ARTIST */}
                             <Link
-                                href={`/Artist/${data.artistId ?? data.id}`}
+                                href={`/Artist/${songData.artistId ?? songData.id}`}
                                 className="text-sm uppercase tracking-[0.3em] text-zinc-500 font-bold hover:text-violet-400 transition"
                             >
-                                {data.artist}
+                                {songData.artist}
                             </Link>
 
                             {/* SONG TITLE */}
                             <h1 className="text-4xl md:text-6xl font-black uppercase leading-tight">
-                                {data.title}
+                                {songData.title}
                             </h1>
 
                             {/* META */}
-                            <div className="flex flex-wrap items-center gap-4 justify-center md:justify-start text-sm text-zinc-400">
-                                <RatingSquare rating={data.rating} variant="inline" />
-                                <span>•</span>
-                                <span>{data.duration ?? "3:45"}</span>
-                            </div>
+                            <RatingAndQuickActions rating={songData.rating} ratingHref={`/Reviews/Song/${songData.id}`} links={songData.externalLinks} type="review" initialModalOpen={shouldOpenRating} modalData={{
+                                title: songData.title,
+                                image: songData.image,
+                                artist: songData.artist,
+                                artistId: songData.artistId,
+                                sonicProfile: songData.sonicProfile,
+                                artistPerformance: songData.artistPerformance,
+                                features: songData.features,
+                            }} />
                             <div className="flex">
 
                                 {/* OPTIONAL: mini context */}
-                                {data.album && (<>
-                                    <Disc size={16} className={`${getRatingFont(data.rating)} mr-2`} />
+                                {songData.album && (<>
+                                    <Disc size={16} className={`${getRatingFont(songData.rating)} mr-2`} />
                                     <Link
-                                        href={`/Album/${data.albumId ?? data.id}`}
+                                        href={`/Album/${songData.albumId ?? songData.id}`}
                                         className="text-xs text-zinc-300 hover:text-violet-400 uppercase tracking-widest font-black">
-                                        {data.album}
+                                        {songData.album}
                                     </Link>
                                 </>
                                 )}
@@ -87,17 +94,17 @@ export default async function SongReviewsPage({params}) {
 
             {/* CONTENT (sin sidebar) */}
             <main className="max-w-5xl mx-auto px-4 space-y-8">
-                <SonicProfile data={data} metrics={data.sonicProfile} image={false} oneLine={true} header={false} />
+                <SonicProfile data={songData} metrics={songData.sonicProfile} image={false} oneLine={true} header={false} />
 
                 {/* EXPLORER */}
                 <ReviewsExplorer
                     userReviews={userReviews}
                     type={"song"}
-                    sonicMetrics={data.sonicProfile}
-                    artistsPerformance={artistsPerformance}
-                    sonicImage={data.image}
-                    sonicTitle={data.title}
-                    sonicSubtitle={data.artist}
+                    sonicMetrics={songData.sonicProfile}
+                    artistsPerformance={songData.artistsPerformance}
+                    sonicImage={songData.image}
+                    sonicTitle={songData.title}
+                    sonicSubtitle={songData.artist}
                 />
 
             </main>

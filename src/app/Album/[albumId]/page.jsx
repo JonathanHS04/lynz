@@ -25,7 +25,7 @@ export default async function AlbumPage({params}) {
                     <img
                         src={albumData.image}
                         className="w-full h-full object-cover scale-110 blur-3xl opacity-30"
-                        alt="Blur background"
+                        alt=""
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/60 to-transparent" />
                 </div>
@@ -48,7 +48,24 @@ export default async function AlbumPage({params}) {
                                 <span className="w-1 h-1 rounded-full bg-gray-600" />
                                 <span className="text-sm">{albumData.releaseYear} • {albumData.tracks.length} canciones • {formatTotalDuration(albumData.duration)}</span>
                             </div>
-                            <RatingAndQuickActions rating={albumData.rating} ratingHref={`/Reviews/Album/${albumData.id}`} links={albumData.externalLinks}/>
+                            <RatingAndQuickActions
+                                rating={albumData.rating}
+                                ratingHref={`/Reviews/Album/${albumData.id}`}
+                                links={albumData.externalLinks}
+                                modalType="album"
+                                modalData={{
+                                    id: albumData.id,
+                                    title: albumData.title,
+                                    image: albumData.image,
+                                    artist: albumData.artist,
+                                    artistId: albumData.artistId,
+                                    genre: albumData.genre,
+                                    releaseYear: albumData.releaseYear,
+                                    duration: albumData.duration,
+                                    sonicProfile: albumData.sonicProfile,
+                                    tracks: albumData.tracks,
+                                }}
+                            />
                         </div>
                     </div>
                 </div>

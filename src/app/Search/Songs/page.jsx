@@ -21,7 +21,7 @@ function mapSongToTrack(song) {
         features: song.features,
         image: song.image || "/placeholder-song.jpg",
         duration: parseSongMeta(song.meta || ""),
-        rating: song.rating || 0,
+        rating: song.rating,
     };
 }
 
