@@ -1,8 +1,8 @@
 // utils/formatTime.js
-export const formatRelativeTime = (dateInput) => {
+export const formatRelativeTime = (dateInput: string | number | Date) => {
   const date = new Date(dateInput);
   const now = new Date();
-  const diffInSeconds = Math.floor((now - date) / 1000);
+  const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
 
   if (diffInSeconds < 60) return "hace unos segundos";
 
@@ -23,7 +23,7 @@ export const formatRelativeTime = (dateInput) => {
   });
 };
 
-export const formatDuration = (ms) => {
+export const formatDuration = (ms: number) => {
   if (!ms) return "0:00";
   const minutes = Math.floor(ms / 60000);
   const seconds = ((ms % 60000) / 1000).toFixed(0);
@@ -31,7 +31,7 @@ export const formatDuration = (ms) => {
 }
 
 // Función auxiliar para duraciones largas (Horas y Minutos)
-export function formatTotalDuration(ms) {
+export function formatTotalDuration(ms: number) {
   const totalSeconds = Math.floor(ms / 1000);
   const hours = Math.floor(totalSeconds / 3600);
   const minutes = Math.floor((totalSeconds % 3600) / 60);

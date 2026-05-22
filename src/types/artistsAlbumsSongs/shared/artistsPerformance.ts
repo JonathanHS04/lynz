@@ -1,0 +1,1 @@
+export type ArtistsPerformance = {id: string; name: string, role: string, rating: number}[];

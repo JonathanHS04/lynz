@@ -2,8 +2,9 @@ import React from 'react'
 import Link from 'next/link'
 import { getRatingFont, getRatingHoverBorder } from '@/utils/getRatingStyle';
 import { formatDuration } from '@/utils/formatTime';
+import { Track } from '@/types/artistsAlbumsSongs/shared/track';
 
-const Tracklist = ({ tracks, images=false }) => {
+const Tracklist = ({ tracks, images=false }: { tracks: Track[]; images?: boolean }) => {
     return (
         <div className="lg:col-span-2 space-y-8">
 
@@ -48,7 +49,7 @@ const Tracklist = ({ tracks, images=false }) => {
                                                         key={i}
                                                         className="text-[10px] text-zinc-700 font-bold uppercase tracking-wider"
                                                     >
-                                                        {feat}{i < track.features.length - 1 ? "," : ""}
+                                                        {feat.name}{i < track.features.length - 1 ? "," : ""}
                                                     </span>
                                                 ))}
                                             </div>

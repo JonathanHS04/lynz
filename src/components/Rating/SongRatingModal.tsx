@@ -5,7 +5,7 @@ import { createPortal } from 'react-dom'
 import { X, Star, Send } from 'lucide-react'
 import { getRatingFont } from '@/utils/getRatingStyle'
 
-const getRatingLabel = (value) => {
+const getRatingLabel = (value: number) => {
     if (!value || value <= 0) return null
     if (value >= 9.6) return 'LEGENDARIO'
     if (value >= 9.0) return 'OBRA MAESTRA'
@@ -17,19 +17,19 @@ const getRatingLabel = (value) => {
     return 'MALO'
 }
 
-const clampRating = (value) => Math.min(10, Math.max(0.5, Math.round(value * 10) / 10))
+const clampRating = (value: number) => Math.min(10, Math.max(0.5, Math.round(value * 10) / 10))
 
-const getDisplayValue = (selectedValue, previewValue, draftValue) => {
+const getDisplayValue = (selectedValue: number, previewValue: number | null, draftValue: string | undefined) => {
     if (previewValue !== null && previewValue !== undefined) return previewValue.toString()
     if (draftValue !== undefined) return draftValue
     return selectedValue > 0 ? selectedValue.toString() : ''
 }
 
-const inputTone = (value) => (
+const inputTone = (value: number) => (
     value > 0 ? getRatingFont(value) : 'text-zinc-700 placeholder:text-zinc-700'
 )
 
-const glowColor = (value) => {
+const glowColor = (value: number) => {
     if (!value || value <= 0) return 'rgba(63, 63, 70, 0)'
     if (value >= 9.6) return 'rgba(139, 92, 246, 0.18)'
     if (value >= 9.0) return 'rgba(56, 189, 248, 0.17)'
@@ -39,7 +39,7 @@ const glowColor = (value) => {
     return 'rgba(239, 68, 68, 0.16)'
 }
 
-const glowMask = (isHalf) => (
+const glowMask = (isHalf: boolean) => (
     isHalf
         ? {
             WebkitMaskImage: 'linear-gradient(to right, #000 50%, transparent 50%)',
@@ -50,11 +50,11 @@ const glowMask = (isHalf) => (
 
 const emptySubscribe = () => () => {}
 
-const StarRow = ({ value = 0, onChange, onPreviewChange, size = 20 }) => {
-    const [hover, setHover] = useState(null)
+const StarRow = ({ value = 0, onChange, onPreviewChange, size = 20 }: { value?: number; onChange?: (value: number) => void; onPreviewChange?: (value: number | null) => void; size?: number }) => {
+    const [hover, setHover] = useState<number | null>(null)
     const display = hover ?? value
 
-    const fillColor = (v) => {
+    const fillColor = (v: number) => {
         if (!v || v <= 0) return 'text-zinc-700 fill-zinc-800/60'
         if (v >= 9.6) return 'text-violet-500 fill-violet-500'
         if (v >= 9.0) return 'text-sky-400 fill-sky-400'
@@ -129,7 +129,7 @@ const StarRow = ({ value = 0, onChange, onPreviewChange, size = 20 }) => {
     )
 }
 
-const SectionLabel = ({ children }) => (
+const SectionLabel = ({ children }: { children: React.ReactNode }) => (
     <div className="flex items-center gap-3 mb-3">
         <span className="text-[10px] font-black uppercase tracking-[0.25em] text-zinc-600">
             {children}
@@ -138,12 +138,13 @@ const SectionLabel = ({ children }) => (
     </div>
 )
 
-export default function SongRatingModal({ isOpen, onClose, songData, initialOverall = 0, onSubmit }) {
+export default function SongRatingModal({ isOpen, onClose, songData, initialOverall = 0, onSubmit }: 
+    { isOpen: boolean; onClose: () => void; songData: any; initialOverall?: number; onSubmit?: (data: any) => void }) {
     const isClient = useSyncExternalStore(emptySubscribe, () => true, () => false)
     const [visible, setVisible] = useState(false)
     const [overall, setOverall] = useState(initialOverall)
-    const [overallDraft, setOverallDraft] = useState(undefined)
-    const [overallPreview, setOverallPreview] = useState(null)
+    const [overallDraft, setOverallDraft] = useState<string | undefined>(undefined)
+    const [overallPreview, setOverallPreview] = useState<number | null>(null)
     const [comment, setComment] = useState('')
     const [sonicRatings, setSonicRatings] = useState({})
     const [sonicDrafts, setSonicDrafts] = useState({})

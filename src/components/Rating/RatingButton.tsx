@@ -3,7 +3,7 @@ import { getRatingFont } from '@/utils/getRatingStyle';
 import { Star } from 'lucide-react';
 import Link from 'next/link';
 
-const RatingButton = ({ href = '#', rating, type = "default" }) => {
+const RatingButton = ({ href = '#', rating, type = "default" }: { href?: string; rating: number; type?: "default" | "artist" | "review" }) => {
     const isArtist = type === "artist";
     const isReview = type === "review";
 

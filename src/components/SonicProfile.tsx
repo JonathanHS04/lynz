@@ -2,6 +2,10 @@ import React from 'react'
 import { Star } from 'lucide-react';
 import { getRatingBorder, getRatingFont } from '@/utils/getRatingStyle';
 
+import { Album } from '@/types/artistsAlbumsSongs/album';
+import { Artist } from '@/types/artistsAlbumsSongs/artist';
+import { Song } from '@/types/artistsAlbumsSongs/song';
+
 const SonicProfile = ({ data, metrics, image=true, header=true, oneLine=false }) => {
     return (
         <article className="rounded-[2rem] p-6 md:p-8">

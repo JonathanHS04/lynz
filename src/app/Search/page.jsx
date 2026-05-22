@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Users, Disc3, Music2 } from "lucide-react";
 import ReleaseCard from "@/components/ReleaseCard";
-import Tracklist from "@/components/Tracklist";
+import Tracklist from "@/components/Tracklist/Tracklist";
 import { searchAll } from "@/services/search";
 
 function SearchSection({ title, subtitle, icon: Icon, items, emptyText, children }) {

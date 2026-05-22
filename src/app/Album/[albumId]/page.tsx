@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import Tracklist from '@/components/Tracklist';
+import Tracklist from '@/components/Tracklist/Tracklist';
 import RatingAndQuickActions from '@/components/Rating/RatingAndQuickActions';
 import RankingInfo from '@/components/RankingInfo';
 import UserReviewsPanel from '@/components/UserReviewsPanel';
@@ -49,22 +49,8 @@ export default async function AlbumPage({params}) {
                                 <span className="text-sm">{albumData.releaseYear} • {albumData.tracks.length} canciones • {formatTotalDuration(albumData.duration)}</span>
                             </div>
                             <RatingAndQuickActions
-                                rating={albumData.rating}
-                                ratingHref={`/Reviews/Album/${albumData.id}`}
-                                links={albumData.externalLinks}
+                                data = {albumData}
                                 modalType="album"
-                                modalData={{
-                                    id: albumData.id,
-                                    title: albumData.title,
-                                    image: albumData.image,
-                                    artist: albumData.artist,
-                                    artistId: albumData.artistId,
-                                    genre: albumData.genre,
-                                    releaseYear: albumData.releaseYear,
-                                    duration: albumData.duration,
-                                    sonicProfile: albumData.sonicProfile,
-                                    tracks: albumData.tracks,
-                                }}
                             />
                         </div>
                     </div>

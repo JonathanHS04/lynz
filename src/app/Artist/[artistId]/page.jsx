@@ -1,5 +1,5 @@
 import React from 'react';
-import Tracklist from '@/components/Tracklist';
+import Tracklist from '@/components/Tracklist/Tracklist';
 import SonicProfile from '@/components/SonicProfile';
 import Releases from './components/Releases';
 import ArtistHero from './components/ArtistHero';

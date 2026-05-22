@@ -11,11 +11,8 @@ import SongRatingModal from '@/components/Rating/SongRatingModal';
 import { getRatingBorder, getRatingFont } from '@/utils/getRatingStyle';
 
 const RatingAndQuickActions = ({
-  rating,
-  links,
-  ratingHref = '#',
+  data,
   type = "default",
-  modalData = null,
   initialModalOpen = false,
   modalType = 'song',
 }) => {
@@ -25,6 +22,12 @@ const RatingAndQuickActions = ({
   const router = useRouter()
   const searchParams = useSearchParams()
   const ActiveModal = modalType === 'album' ? AlbumRatingModal : SongRatingModal
+
+  const ratingHref = 
+    type === "artist" ? `/Reviews/Artist/${data.id}`
+    : `/${modalType === 'album' ? 'Reviews/Album' 
+    : 'Reviews/Song'}/${data.id}`
+
 
   const handleOpenRating = () => {
     if (pathname === ratingHref) {
@@ -57,7 +60,7 @@ const RatingAndQuickActions = ({
     <>
       <div className="flex flex-wrap items-center justify-center md:justify-start gap-6">
 
-        <RatingButton href={ratingHref} rating={rating} type={type} />
+        <RatingButton href={ratingHref} rating={data.rating} type={type} />
 
         {/* DIVIDER */}
         <div className="h-12 w-[1px] bg-white/10 hidden md:block" />
@@ -93,9 +96,9 @@ const RatingAndQuickActions = ({
           )}
 
         {/* SPOTIFY */}
-        {links?.spotify && (
+        {data.links?.spotify && (
           <a
-            href={links.spotify}
+            href={data.links.spotify}
             target="_blank"
             rel="noopener noreferrer"
             className="group rounded-full border border-white/10 bg-white/5 p-4 transition-all active:scale-95 hover:shadow-[0_0_20px_rgba(29,185,84,0.35)]"
@@ -105,9 +108,9 @@ const RatingAndQuickActions = ({
         )}
 
         {/* APPLE MUSIC */}
-        {links?.appleMusic && (
+        {data.links?.appleMusic && (
           <a
-            href={links.appleMusic}
+            href={data.links.appleMusic}
             target="_blank"
             rel="noopener noreferrer"
             className="group rounded-full border border-white/10 bg-white/5 p-4 transition-all active:scale-95 hover:shadow-[0_0_20px_rgba(250,35,59,0.35)]"
@@ -128,7 +131,7 @@ const RatingAndQuickActions = ({
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         onSubmit={handleSubmitRating}
-        {...(modalType === 'album' ? { albumData: modalData } : { songData: modalData })}
+        {...(modalType === 'album' ? { albumData: data } : { songData: data })}
       />
     </>
   )
