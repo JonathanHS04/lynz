@@ -2,7 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 import { getRatingFont, getRatingHoverBorder } from '@/utils/getRatingStyle';
 import { formatDuration } from '@/utils/formatTime';
-import { Track } from '@/types/artistsAlbumsSongs/shared/track';
+import { Track } from '@repo/types';
 
 const Tracklist = ({ tracks, images=false }: { tracks: Track[]; images?: boolean }) => {
     return (

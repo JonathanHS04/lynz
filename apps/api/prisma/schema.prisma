@@ -1,0 +1,37 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model songCache {
+  mbid      String   @id
+  jsonData Json
+}
+
+model albumCache {
+  mbid      String   @id
+  jsonData Json
+}
+
+model artistCache {
+  mbid      String   @id
+  jsonData Json
+  imageUrl String?
+}
+
+model user {
+  id       String   @id @default(uuid())
+  username String   @unique
+  password String
+  email    String   @unique
+  role    String  @default("user")
+}
