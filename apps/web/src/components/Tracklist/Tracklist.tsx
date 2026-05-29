@@ -2,9 +2,9 @@ import React from 'react'
 import Link from 'next/link'
 import { getRatingFont, getRatingHoverBorder } from '@/utils/getRatingStyle';
 import { formatDuration } from '@/utils/formatTime';
-import { Track } from '@repo/types';
+import { AlbumTrack, Track } from '@repo/types';
 
-const Tracklist = ({ tracks, images=false }: { tracks: Track[]; images?: boolean }) => {
+const Tracklist = ({ tracks, images=false }: { tracks: AlbumTrack[]; images?: boolean }) => {
     return (
         <div className="lg:col-span-2 space-y-8">
 
@@ -23,33 +23,33 @@ const Tracklist = ({ tracks, images=false }: { tracks: Track[]; images?: boolean
                                 {images && (
                                     <img
                                         src={track.image}
-                                        alt={track.title}
+                                        alt={track.name}
                                         className="w-12 h-12"
                                     />
                                 )}
 
                             <div className="flex-1 ">
                                 <h4 className={`text-sm font-bold ${getRatingFont(track.rating)} uppercase tracking-tight`}>
-                                    {track.title}
+                                    {track.name}
                                 </h4>
 
                                 <div className="flex items-center gap-2 mt-0.5 flex-wrap">
                                     {/* Artista Principal */}
                                     <span className="text-[10px] text-gray-500 font-bold uppercase tracking-widest italic">
-                                        {track.artist}
+                                        {track.artists.filter(a => a.role === 'Main').map(a => a.name).join(', ')}
                                     </span>
 
                                     {/* Renderizado de Features */}
-                                    {track.features.length > 0 && (
+                                    {track.artists.filter(a => a.role === 'Feature').length > 0 && (
                                         <>
                                             <span className="text-[10px] text-zinc-700 font-black">FT.</span>
                                             <div className="flex gap-1.5">
-                                                {track.features.map((feat, i) => (
+                                                {track.artists.filter(a => a.role === 'Feature').map((artist, i) => (
                                                     <span
                                                         key={i}
                                                         className="text-[10px] text-zinc-700 font-bold uppercase tracking-wider"
                                                     >
-                                                        {feat.name}{i < track.features.length - 1 ? "," : ""}
+                                                        {artist.name}{i < track.artists.filter(a => a.role === 'Feature').length - 1 ? "," : ""}
                                                     </span>
                                                 ))}
                                             </div>

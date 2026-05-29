@@ -1,5 +1,5 @@
 import dotenv from 'dotenv'; 
-import { getRandomRating } from '../../utils/mockData';
+import { getRandomRating } from '../../utils/mockData.js';
 dotenv.config();
 
 const AGENT = process.env.AGENT;

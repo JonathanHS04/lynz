@@ -41,3 +41,10 @@ export function formatTotalDuration(ms: number) {
   }
   return `${minutes} min`;
 }
+
+export function getReleaseYear(releaseDate: string) {
+  if (!releaseDate) return null;
+  const date = new Date(releaseDate);
+  if (isNaN(date.getTime())) return null;
+  return date.getFullYear();
+}

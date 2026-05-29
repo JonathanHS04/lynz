@@ -1,0 +1,11 @@
+-- AlterTable
+ALTER TABLE "albumInfo" ALTER COLUMN "image" DROP NOT NULL,
+ALTER COLUMN "genre" DROP NOT NULL;
+
+-- AlterTable
+ALTER TABLE "artistInfo" ALTER COLUMN "image" DROP NOT NULL,
+ALTER COLUMN "genres" DROP NOT NULL;
+
+-- AlterTable
+ALTER TABLE "songInfo" ALTER COLUMN "image" DROP NOT NULL,
+ALTER COLUMN "genre" DROP NOT NULL;

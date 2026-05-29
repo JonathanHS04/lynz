@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import { createPortal } from 'react-dom'
 import { X, Star, Send } from 'lucide-react'
 import { getRatingFont } from '@/utils/getRatingStyle'
+import { Song } from '@repo/types/src/artistsAlbumsSongs/song'
 
 const getRatingLabel = (value: number) => {
     if (!value || value <= 0) return null
@@ -139,7 +140,7 @@ const SectionLabel = ({ children }: { children: React.ReactNode }) => (
 )
 
 export default function SongRatingModal({ isOpen, onClose, songData, initialOverall = 0, onSubmit }: 
-    { isOpen: boolean; onClose: () => void; songData: any; initialOverall?: number; onSubmit?: (data: any) => void }) {
+    { isOpen: boolean; onClose: () => void; songData: Song; initialOverall?: number; onSubmit?: (data: any) => void }) {
     const isClient = useSyncExternalStore(emptySubscribe, () => true, () => false)
     const [visible, setVisible] = useState(false)
     const [overall, setOverall] = useState(initialOverall)
@@ -285,8 +286,8 @@ export default function SongRatingModal({ isOpen, onClose, songData, initialOver
     }]
     if (songData?.features) {
         artists = artists.concat(songData.features.map((feature, index) => ({
-            id: feature.id ?? feature.name ?? `feature-${index}`,
-            name: feature.name ?? feature,
+            id: feature.id ?? `feature-${index}`,
+            name: feature.name,
             image: feature.image ?? songData?.image,
             role: 'Feature',
         })))
@@ -344,7 +345,7 @@ export default function SongRatingModal({ isOpen, onClose, songData, initialOver
                         <div className="flex items-center gap-4">
                             <img
                                 src={songData?.image}
-                                alt={songData?.title}
+                                alt={songData?.name}
                                 className="w-14 h-14 rounded-2xl object-cover border border-white/10 shadow-xl shrink-0"
                             />
                             <div className="min-w-0">
@@ -352,7 +353,7 @@ export default function SongRatingModal({ isOpen, onClose, songData, initialOver
                                     Rate Track
                                 </p>
                                 <h2 className="text-xl font-black tracking-tight leading-tight truncate text-white">
-                                    {songData?.title}
+                                    {songData?.name}
                                 </h2>
                                 <p className="text-sm text-zinc-400 truncate">{songData?.artist}</p>
                             </div>

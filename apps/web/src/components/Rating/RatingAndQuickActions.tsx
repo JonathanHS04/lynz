@@ -9,24 +9,29 @@ import { SiApplemusic } from "react-icons/si";
 import AlbumRatingModal from '@/components/Rating/AlbumRatingModal';
 import SongRatingModal from '@/components/Rating/SongRatingModal';
 import { getRatingBorder, getRatingFont } from '@/utils/getRatingStyle';
+import { Album, Song, Artist } from '@repo/types';
 
 const RatingAndQuickActions = ({
   data,
-  type = "default",
+  type = "song",
   initialModalOpen = false,
-  modalType = 'song',
+  isReview = false
+}:{
+  data: Album | Song | Artist;
+  type: "song" | "album" | "artist";
+  initialModalOpen?: boolean;
+  isReview?: boolean;
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(initialModalOpen)
   const [submittedRating, setSubmittedRating] = useState(null)
   const pathname = usePathname()
   const router = useRouter()
   const searchParams = useSearchParams()
-  const ActiveModal = modalType === 'album' ? AlbumRatingModal : SongRatingModal
-
+  
   const ratingHref = 
     type === "artist" ? `/Reviews/Artist/${data.id}`
-    : `/${modalType === 'album' ? 'Reviews/Album' 
-    : 'Reviews/Song'}/${data.id}`
+    : type === "album" ? `/Reviews/Album/${data.id}`
+    : `/Reviews/Song/${data.id}`
 
 
   const handleOpenRating = () => {
@@ -60,7 +65,7 @@ const RatingAndQuickActions = ({
     <>
       <div className="flex flex-wrap items-center justify-center md:justify-start gap-6">
 
-        <RatingButton href={ratingHref} rating={data.rating} type={type} />
+        <RatingButton href={ratingHref} rating={data.rating} type={type} isReview={isReview} />
 
         {/* DIVIDER */}
         <div className="h-12 w-[1px] bg-white/10 hidden md:block" />
@@ -96,9 +101,9 @@ const RatingAndQuickActions = ({
           )}
 
         {/* SPOTIFY */}
-        {data.links?.spotify && (
+        {data.externalLinks?.spotify && (
           <a
-            href={data.links.spotify}
+            href={data.externalLinks.spotify}
             target="_blank"
             rel="noopener noreferrer"
             className="group rounded-full border border-white/10 bg-white/5 p-4 transition-all active:scale-95 hover:shadow-[0_0_20px_rgba(29,185,84,0.35)]"
@@ -108,9 +113,9 @@ const RatingAndQuickActions = ({
         )}
 
         {/* APPLE MUSIC */}
-        {data.links?.appleMusic && (
+        {data.externalLinks?.appleMusic && (
           <a
-            href={data.links.appleMusic}
+            href={data.externalLinks.appleMusic}
             target="_blank"
             rel="noopener noreferrer"
             className="group rounded-full border border-white/10 bg-white/5 p-4 transition-all active:scale-95 hover:shadow-[0_0_20px_rgba(250,35,59,0.35)]"
@@ -127,12 +132,24 @@ const RatingAndQuickActions = ({
       </div>
       </div>
 
-      <ActiveModal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        onSubmit={handleSubmitRating}
-        {...(modalType === 'album' ? { albumData: data } : { songData: data })}
-      />
+      
+
+      {
+      type === 'album' ? (
+        <AlbumRatingModal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          onSubmit={handleSubmitRating}
+          albumData={data as Album}
+        />
+      ) : (
+        <SongRatingModal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          onSubmit={handleSubmitRating}
+          songData={data as Song}
+        />
+      )}
     </>
   )
 }

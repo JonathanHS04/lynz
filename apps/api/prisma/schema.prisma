@@ -1,10 +1,8 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
   output   = "../src/generated/prisma"
 }
 
@@ -12,26 +10,210 @@ datasource db {
   provider = "postgresql"
 }
 
-model songCache {
-  mbid      String   @id
-  jsonData Json
+// ==========================================
+// 1. MODELOS PRINCIPALES (ENTIDADES PURAS)
+// ==========================================
+
+model artistInfo {
+  id            String    @id // MBID del artista
+  name          String
+  country       String?   // Opcional para el flujo de cascarones
+  activeSince   DateTime?
+  image         String?
+  genres        Json?     // Arreglo de string[] para los géneros
+  externalLinks Json?     // Estructura de ExternalLinks opcional
+  isComplete    Boolean   @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relaciones Muchos a Muchos mediante tablas intermedias
+  albums        ArtistOnAlbum[] 
+  songs         ArtistOnSong[]  
+
+  ratingData    artistRatingInfo?
+
+  @@index([name])
 }
 
-model albumCache {
-  mbid      String   @id
-  jsonData Json
+model albumInfo {
+  id            String    @id // MBID del álbum
+  name          String
+  image         String?
+  type          String?    // "Album", "EP", "Single"
+  externalLinks Json?
+  isComplete    Boolean   @default(false)
+  duration      Int?
+  releaseDate   DateTime? 
+  genre         String?
+  canonicalReleaseId String? // Para vincular con la release canónica en MusicBrainz, si es diferente al ID del álbum
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relaciones intermedias
+  artists       ArtistOnAlbum[] // Muchos artistas pueden firmar este álbum
+  tracks        Track[]         // Sus canciones mapeadas en el tracklist
+  requestedMbids AlbumRequestedMbid[] // Alias de MBIDs
+
+  ratingData    albumRatingInfo?
+
+  @@index([name])
+  @@index([canonicalReleaseId])
 }
 
-model artistCache {
-  mbid      String   @id
-  jsonData Json
-  imageUrl String?
+model AlbumRequestedMbid {
+  mbid      String    @id
+  albumId   String
+  album     albumInfo @relation(fields: [albumId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime  @default(now())
+
+  @@index([albumId])
 }
+
+model songInfo {
+  id            String    @id // MBID de la canción
+  name          String
+  image         String?   // Portada específica del track (si la hay)
+  externalLinks Json?      
+  isComplete    Boolean   @default(false)
+  duration      Int?      // Milisegundos
+  releaseDate   DateTime? 
+  genre         String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relaciones intermedias puras (Metadata del álbum se saca vía 'tracks')
+  artists       ArtistOnSong[]  // Muchos artistas pueden ser dueños de la canción
+  tracks        Track[]         // La canción puede vivir en muchos álbumes, pero la metadata del álbum se saca vía 'tracks'
+  
+  ratingData    songRatingInfo?
+
+  @@index([name])
+}
+
+// ==========================================
+// 2. TABLAS INTERMEDIAS (RELACIONES MUCHOS A MUCHOS)
+// ==========================================
+
+// Conecta múltiples artistas con un álbum (Ej: Oasis -> J Balvin, Bad Bunny)
+model ArtistOnAlbum {
+  id       String     @id @default(uuid())
+  artistId String
+  albumId  String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  artist   artistInfo @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  album    albumInfo  @relation(fields: [albumId], references: [id], onDelete: Cascade)
+
+  @@unique([artistId, albumId])
+  @@index([albumId])
+}
+
+// Conecta múltiples artistas con una canción (Ej: TQG -> Shakira, Karol G)
+model ArtistOnSong {
+  id       String     @id @default(uuid())
+  artistId String
+  songId   String
+  role     ArtistRole
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  artist   artistInfo @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  song     songInfo   @relation(fields: [songId], references: [id], onDelete: Cascade)
+
+  @@unique([artistId, songId, role])
+  @@index([songId])
+}
+
+// Conecta canciones con álbumes generando el tracklist ordenado
+model Track {
+  id         String    @id @default(uuid())
+  albumId    String
+  songId     String
+  position   Int?       // Se deja como posible null, ya que si se crea la relacion a partir de la canción,
+                        // no se tendrá la posición. Solo se llenará cuando se cree a partir del álbum.
+                        // Esto no afecta ya que la posición no se utiliza hasta que se tenga el álbum completo, 
+                        // y el flujo de cascarones permite crear la relación desde la canción sin necesidad de la posición.
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  album      albumInfo @relation(fields: [albumId], references: [id], onDelete: Cascade)
+  song       songInfo  @relation(fields: [songId], references: [id], onDelete: Cascade)
+
+  @@unique([albumId, songId])
+  @@index([songId])
+}
+
+// ==========================================
+// 3. MODELOS DE RATINGS Y REVIEWS (1:1)
+// ==========================================
+
+model artistRatingInfo {
+  id           String     @id
+  artist       artistInfo @relation(fields: [id], references: [id], onDelete: Cascade)
+  rating       Float
+  sonicProfile Json       
+  rankings     Json
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt       
+}
+
+model albumRatingInfo {
+  id           String    @id
+  album        albumInfo @relation(fields: [id], references: [id], onDelete: Cascade)
+  rating       Float
+  sonicProfile Json
+  userReviews  Json
+  rankings     Json
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model songRatingInfo {
+  id                 String   @id
+  song               songInfo @relation(fields: [id], references: [id], onDelete: Cascade)
+  rating             Float
+  sonicProfile       Json     
+  artistsPerformance Json     
+  userReviews        Json     
+  rankings           Json
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt     
+}
+
+// ==========================================
+// 4. AUTENTICACIÓN Y USUARIOS
+// ==========================================
 
 model user {
-  id       String   @id @default(uuid())
-  username String   @unique
+  id       String @id @default(uuid())
+  username String @unique
   password String
-  email    String   @unique
-  role    String  @default("user")
+  email    String @unique
+  role     Role   @default(user)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  user
+  moderator
+  admin
+}
+
+enum ArtistRole {
+  Main
+  Feature
+  Producer
+  Writer
 }

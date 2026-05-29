@@ -1,20 +1,6 @@
-export const featuredAlbum = {
-  id: "22047c46-51da-4762-abd0-e31191e6610f",
-  artist: "Omar Courtz",
-  album: "POR SI MAÑANA NO ESTOY",
-  score: 9.4,
-  image: "https://i1.sndcdn.com/artworks-72d80e69-18fe-4175-b049-3393db902285-0-t500x500.jpg",
-  genre: "Reguetón/Trap Latino",
-};
+export const featuredAlbumId = "22047c46-51da-4762-abd0-e31191e6610f"
+export const featuredSongId = "cd132e69-1be3-4b78-a36c-f6042b3bde50";
 
-export const featuredSong = {
-  id: "cd132e69-1be3-4b78-a36c-f6042b3bde50",
-  artist: "Tainy",
-  title: "Monstruo",
-  score: 9.6,
-  image: "https://es.rollingstone.com/wp-content/uploads/2025/10/Tainy-comienza-un-nuevo-capitulo-junto-a-Feid-con-Monstruo-1.jpg",
-  genre: "Reguetón/Trap Latino",
-};
 
 export const featuredArtist = {
   id: 1,
@@ -46,39 +32,6 @@ export const quickExplore = [
     title: "Reseñas",
     description: "Lo que la comunidad está comentando ahora mismo.",
     href: "/Reviews/Explorer",
-  },
-];
-
-export const weeklySpotlight = [
-  {
-    type: "Álbum",
-    title: featuredAlbum.album,
-    subtitle: featuredAlbum.artist,
-    description: featuredAlbum.summary,
-    image: featuredAlbum.image,
-    href: `/Album/${featuredAlbum.id}`,
-    score: featuredAlbum.score,
-    meta: featuredAlbum.genre,
-  },
-  {
-    type: "Canción",
-    title: featuredSong.title,
-    subtitle: featuredSong.artist,
-    description: featuredSong.summary,
-    image: featuredSong.image,
-    href: `/Song/${featuredSong.id}`,
-    score: featuredSong.score,
-    meta: featuredSong.genre,
-  },
-  {
-    type: "Artista",
-    title: featuredArtist.name,
-    subtitle: featuredArtist.city,
-    description: featuredArtist.summary,
-    image: featuredArtist.image,
-    href: `/Artist/${featuredArtist.id}`,
-    score: featuredArtist.rating,
-    meta: `${featuredArtist.monthlyListeners} oyentes mensuales`,
   },
 ];
 

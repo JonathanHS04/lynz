@@ -5,9 +5,11 @@ import { createPortal } from 'react-dom'
 import { Send, Star, X } from 'lucide-react'
 import SongRatingModal from '@/components/Rating/SongRatingModal'
 import { getRatingFont, getRatingHoverBorder } from '@/utils/getRatingStyle'
-import { formatDuration, formatTotalDuration } from '@/utils/formatTime'
+import { formatDuration, formatTotalDuration, getReleaseYear } from '@/utils/formatTime'
+import { Feature, Album, Track, SonicProfile, Song } from '@repo/types'
+import { getSongData } from '@/services/song'
 
-const getRatingLabel = (value) => {
+const getRatingLabel = (value: number) => {
     if (!value || value <= 0) return null
     if (value >= 9.6) return 'LEGENDARIO'
     if (value >= 9.0) return 'OBRA MAESTRA'
@@ -19,19 +21,19 @@ const getRatingLabel = (value) => {
     return 'MALO'
 }
 
-const clampRating = (value) => Math.min(10, Math.max(0.5, Math.round(value * 10) / 10))
+const clampRating = (value: number) => Math.min(10, Math.max(0.5, Math.round(value * 10) / 10))
 
-const getDisplayValue = (selectedValue, previewValue, draftValue) => {
+const getDisplayValue = (selectedValue: number, previewValue: number | null, draftValue: string | undefined) => {
     if (previewValue !== null && previewValue !== undefined) return previewValue.toString()
     if (draftValue !== undefined) return draftValue
     return selectedValue > 0 ? selectedValue.toString() : ''
 }
 
-const inputTone = (value) => (
+const inputTone = (value: number) => (
     value > 0 ? getRatingFont(value) : 'text-zinc-700 placeholder:text-zinc-700'
 )
 
-const glowColor = (value) => {
+const glowColor = (value: number) => {
     if (!value || value <= 0) return 'rgba(63, 63, 70, 0)'
     if (value >= 9.6) return 'rgba(139, 92, 246, 0.8)'
     if (value >= 9.0) return 'rgba(56, 189, 248, 0.8)'
@@ -41,7 +43,7 @@ const glowColor = (value) => {
     return 'rgba(239, 68, 68, 0.8)'
 }
 
-const glowMask = (isHalf) => (
+const glowMask = (isHalf: boolean) => (
     isHalf
         ? {
             WebkitMaskImage: 'linear-gradient(to right, #000 50%, transparent 50%)',
@@ -50,11 +52,17 @@ const glowMask = (isHalf) => (
         : undefined
 )
 
-const StarRow = ({ value = 0, onChange, onPreviewChange, size = 20 }) => {
-    const [hover, setHover] = useState(null)
+const StarRow = ({ value = 0, onChange, onPreviewChange, size = 20 }: 
+    { 
+        value?: number; 
+        onChange?: (value: number) => void; 
+        onPreviewChange?: (value: number | null) => void; 
+        size?: number 
+    }) => {
+    const [hover, setHover] = useState<number | null>(null)
     const display = hover ?? value
 
-    const fillColor = (nextValue) => {
+    const fillColor = (nextValue: number) => {
         if (!nextValue || nextValue <= 0) return 'text-zinc-700 fill-zinc-800/60'
         if (nextValue >= 9.6) return 'text-violet-500 fill-violet-500'
         if (nextValue >= 9.0) return 'text-sky-400 fill-sky-400'
@@ -130,7 +138,7 @@ const StarRow = ({ value = 0, onChange, onPreviewChange, size = 20 }) => {
     )
 }
 
-const SectionLabel = ({ children }) => (
+const SectionLabel = ({ children }: { children: React.ReactNode }) => (
     <div className="flex items-center gap-3 mb-3">
         <span className="text-[10px] font-black uppercase tracking-[0.25em] text-zinc-600">
             {children}
@@ -139,7 +147,7 @@ const SectionLabel = ({ children }) => (
     </div>
 )
 
-const trackFeatureText = (track) => {
+const trackFeatureText = (track: { features?: Feature[] }) => {
     if (!Array.isArray(track?.features) || track.features.length === 0) {
         return null
     }
@@ -149,7 +157,13 @@ const trackFeatureText = (track) => {
 
 const emptySubscribe = () => () => { }
 
-export default function AlbumRatingModal({ isOpen, onClose, albumData, onSubmit }) {
+export default function AlbumRatingModal({ isOpen, onClose, albumData, onSubmit }: 
+    { 
+        isOpen: boolean; 
+        onClose: () => void; 
+        albumData: Album; 
+        onSubmit: (data: any) => void 
+    }) {
     const isClient = useSyncExternalStore(emptySubscribe, () => true, () => false)
     const [visible, setVisible] = useState(false)
     const [overall, setOverall] = useState(0)
@@ -159,7 +173,8 @@ export default function AlbumRatingModal({ isOpen, onClose, albumData, onSubmit 
     const [sonicRatings, setSonicRatings] = useState({})
     const [sonicDrafts, setSonicDrafts] = useState({})
     const [sonicPreviews, setSonicPreviews] = useState({})
-    const [activeTrack, setActiveTrack] = useState(null)
+    const [activeTrack, setActiveTrack] = useState<Track | null>(null)
+    const [activeSongData, setActiveSongData] = useState<Song | null>(null)
     const [trackRatings, setTrackRatings] = useState({})
     const lockStylesRef = useRef(null)
 
@@ -269,7 +284,7 @@ export default function AlbumRatingModal({ isOpen, onClose, albumData, onSubmit 
         })
     }
 
-    const sonicProfile = [
+    const sonicProfile: SonicProfile = [
         { label: "Ritmo", value: 0 },
         { label: "Flow", value: 0 },
         { label: "Letra", value: 0 },
@@ -280,22 +295,15 @@ export default function AlbumRatingModal({ isOpen, onClose, albumData, onSubmit 
     const tracks = albumData?.tracks ?? []
     const activeAlbumRating = overallPreview ?? overall
     const albumMeta = [
-        albumData?.releaseYear,
+        getReleaseYear(albumData?.releaseDate),
         tracks.length > 0 ? `${tracks.length} tracks` : null,
         albumData?.duration ? formatTotalDuration(albumData.duration) : null,
     ].filter(Boolean)
 
-    const buildSongModalData = (track) => ({
-        id: track.id,
-        title: track.title,
-        image: track.image ?? albumData?.image,
-        artist: track.artist ?? albumData?.artist,
-        artistId: track.artistId ?? albumData?.artistId,
-        artistImage: track.artistImage ?? albumData?.image,
-        sonicProfile: sonicProfile,
-        artistPerformance: track.artistPerformance ?? [],
-        features: track.features ?? [],
-    })
+    const buildSongModalData = async (track: Track): Promise<Song | null> => {
+        let songData: Song | null = await getSongData(track.id)
+        return songData;
+    }
 
     const handleSubmit = () => {
         if (overall === 0) return
@@ -348,7 +356,7 @@ export default function AlbumRatingModal({ isOpen, onClose, albumData, onSubmit 
                             <div className="flex items-start gap-4 min-w-0">
                                 <img
                                     src={albumData?.image}
-                                    alt={albumData?.title}
+                                    alt={albumData?.name}
                                     className="w-20 h-20 sm:w-24 sm:h-24 rounded-[1.4rem] object-cover border border-white/10 shadow-[0_20px_40px_rgba(0,0,0,0.38)] shrink-0"
                                 />
                                 <div className="min-w-0 flex-1 space-y-2.5">
@@ -357,7 +365,7 @@ export default function AlbumRatingModal({ isOpen, onClose, albumData, onSubmit 
                                     </p>
                                     <div className="space-y-1.5 min-w-0">
                                         <h2 className="text-2xl sm:text-3xl lg:text-[2.3rem] font-black tracking-tighter leading-[0.92] uppercase text-white overflow-hidden [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]">
-                                            {albumData?.title}
+                                            {albumData?.name}
                                         </h2>
                                         <p className="text-sm sm:text-base text-zinc-300 truncate">{albumData?.artist}</p>
                                     </div>
@@ -493,7 +501,7 @@ export default function AlbumRatingModal({ isOpen, onClose, albumData, onSubmit 
                                     const features = trackFeatureText(track)
                                     return (
                                         <div
-                                            key={track.id ?? `${track.title}-${index}`}
+                                            key={track.id ?? `${track.name}-${index}`}
                                             className={`flex items-center gap-4 p-4 rounded-xl transition-all group cursor-default border border-transparent ${getRatingHoverBorder(accentRating)}`}
                                         >
                                             <span className={`w-6 text-sm font-bold text-center shrink-0 ${getRatingFont(accentRating)}`}>
@@ -502,7 +510,7 @@ export default function AlbumRatingModal({ isOpen, onClose, albumData, onSubmit 
 
                                             <div className="flex-1 min-w-0">
                                                 <h4 className={`text-sm font-bold uppercase tracking-tight truncate ${getRatingFont(accentRating)}`}>
-                                                    {track.title}
+                                                    {track.name}
                                                 </h4>
 
                                                 <div className="flex items-center gap-2 mt-0.5 flex-wrap">
@@ -516,10 +524,10 @@ export default function AlbumRatingModal({ isOpen, onClose, albumData, onSubmit 
                                                             <div className="flex gap-1.5 flex-wrap">
                                                                 {features.map((feature, featureIndex) => (
                                                                     <span
-                                                                        key={`${track.id ?? track.title}-${featureIndex}`}
+                                                                        key={`${track.id ?? track.name}-${featureIndex}`}
                                                                         className="text-[10px] text-zinc-700 font-bold uppercase tracking-wider"
                                                                     >
-                                                                        {feature}{featureIndex < features.length - 1 ? ',' : ''}
+                                                                        {feature.name}{featureIndex < features.length - 1 ? ',' : ''}
                                                                     </span>
                                                                 ))}
                                                             </div>
@@ -534,7 +542,10 @@ export default function AlbumRatingModal({ isOpen, onClose, albumData, onSubmit 
 
                                             <button
                                                 type="button"
-                                                onClick={() => setActiveTrack(track)}
+                                                onClick={async () => {
+                                                    const songData = await getSongData(track.id)
+                                                    setActiveSongData(songData)
+                                                }}
                                                 className={`group h-[42px] w-[132px] shrink-0 rounded-2xl border px-3 transition-all cursor-pointer active:scale-95 ${displayRating !== null
                                                     ? 'border-white/[0.08] bg-white/[0.05] hover:border-white/[0.14] hover:bg-white/[0.08]'
                                                     : 'border-white/[0.07] bg-white/[0.025] text-zinc-300 hover:border-white/[0.12] hover:bg-white/[0.055]'
@@ -596,7 +607,7 @@ export default function AlbumRatingModal({ isOpen, onClose, albumData, onSubmit 
                     onSubmit={({ overall: nextOverall }) => {
                         setTrackRatings((prev) => ({ ...prev, [activeTrack.id]: nextOverall }))
                     }}
-                    songData={buildSongModalData(activeTrack)}
+                    songData={activeSongData}
                 />
             )}
         </>,
